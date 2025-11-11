@@ -9,7 +9,9 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str
+    password: Optional[str] = None
+    is_admin: Optional[bool] = False
+    is_active: Optional[bool] = True
 
 
 class UserLogin(BaseModel):

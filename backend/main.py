@@ -4,7 +4,7 @@ import os
 from typing import List
 
 from database import init_db
-from routers import auth, profile
+from routers import auth, profile, users
 
 app = FastAPI(title="Dashboard API", version="1.0.0")
 
@@ -25,6 +25,7 @@ app.add_middleware(
 # 라우터 등록
 app.include_router(auth.router)
 app.include_router(profile.router)
+app.include_router(users.router)
 
 # 데이터베이스 초기화
 @app.on_event("startup")

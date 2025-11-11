@@ -15,6 +15,7 @@ import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import ResetPassword from './pages/ResetPassword';
 import TwoStepVerification from './pages/TwoStepVerification';
+import Users from './pages/Users';
 
 // 보호된 라우트 컴포넌트
 const ProtectedRoute = ({ children }) => {
@@ -78,6 +79,7 @@ function App() {
                         <main className="min-h-screen">
                           <Routes>
                             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                            <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
                             <Route path="/tables" element={<ProtectedRoute><Tables /></ProtectedRoute>} />
                             <Route path="/forms" element={<ProtectedRoute><Forms /></ProtectedRoute>} />
                             <Route path="/charts" element={<ProtectedRoute><Charts /></ProtectedRoute>} />
