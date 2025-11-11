@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 const Header = ({ onMenuClick }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleLogout = () => {
     logout();
@@ -52,7 +54,7 @@ const Header = ({ onMenuClick }) => {
             </svg>
             <input
               type="text"
-              placeholder="Search..."
+              placeholder={t('common.search')}
               className="bg-transparent border-none outline-none text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-[#9da6b9] w-48"
             />
           </div>
@@ -70,13 +72,13 @@ const Header = ({ onMenuClick }) => {
             </button>
             {isNotificationOpen && (
               <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-[#282e39] rounded-lg shadow-lg border border-gray-200 dark:border-[#3a3f4a] p-4 transition-colors">
-                <h3 className="text-gray-900 dark:text-white font-semibold mb-2">Notifications</h3>
+                <h3 className="text-gray-900 dark:text-white font-semibold mb-2">{t('common.notifications')}</h3>
                 <div className="space-y-2">
                   <div className="text-sm text-gray-700 dark:text-gray-300 p-2 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] rounded cursor-pointer transition-colors">
-                    New message received
+                    {t('header.newMessageReceived')}
                   </div>
                   <div className="text-sm text-gray-700 dark:text-gray-300 p-2 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] rounded cursor-pointer transition-colors">
-                    Order #1234 has been shipped
+                    {t('header.orderShipped')}
                   </div>
                 </div>
               </div>
@@ -96,7 +98,7 @@ const Header = ({ onMenuClick }) => {
             {isProfileOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#282e39] rounded-lg shadow-lg border border-gray-200 dark:border-[#3a3f4a] py-2 transition-colors z-50">
                 <div className="px-4 py-2 border-b border-gray-200 dark:border-[#3a3f4a]">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.full_name || 'User'}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.full_name || t('common.user')}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email || ''}</p>
                 </div>
                 <Link
@@ -104,21 +106,21 @@ const Header = ({ onMenuClick }) => {
                   onClick={() => setIsProfileOpen(false)}
                   className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
                 >
-                  Profile
+                  {t('common.profile')}
                 </Link>
                 <Link
                   to="/settings"
                   onClick={() => setIsProfileOpen(false)}
                   className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
                 >
-                  Settings
+                  {t('common.settings')}
                 </Link>
                 <hr className="my-2 border-gray-200 dark:border-[#3a3f4a]" />
                 <button
                   onClick={handleLogout}
                   className="w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
                 >
-                  Logout
+                  {t('common.logout')}
                 </button>
               </div>
             )}

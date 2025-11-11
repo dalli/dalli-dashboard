@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { api } from '../utils/api';
+import { useTranslation } from 'react-i18next';
 
 const Profile = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { user: currentUser } = useAuth();
+  const { t } = useTranslation();
   const [profile, setProfile] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -69,7 +71,7 @@ const Profile = () => {
         instagram_url: profileData.instagram_url || '',
       });
     } catch (err) {
-      setError(err.message || '프로파일을 불러오는데 실패했습니다.');
+      setError(err.message || t('profile.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -96,7 +98,7 @@ const Profile = () => {
       setProfile(updated);
       setIsEditingPersonal(false);
     } catch (err) {
-      setError(err.message || '프로파일 업데이트에 실패했습니다.');
+      setError(err.message || t('profile.failedToUpdate'));
     }
   };
 
@@ -112,7 +114,7 @@ const Profile = () => {
       setProfile(updated);
       setIsEditingAddress(false);
     } catch (err) {
-      setError(err.message || '주소 업데이트에 실패했습니다.');
+      setError(err.message || t('profile.failedToUpdateAddress'));
     }
   };
 
@@ -127,7 +129,7 @@ const Profile = () => {
       const updated = await api.put(`/api/profile/${profileUserId}`, updateData);
       setProfile(updated);
     } catch (err) {
-      setError(err.message || '소셜 링크 업데이트에 실패했습니다.');
+      setError(err.message || t('profile.failedToUpdateSocial'));
     }
   };
 
@@ -136,7 +138,7 @@ const Profile = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">로딩 중...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">{t('profile.loading')}</p>
         </div>
       </div>
     );
@@ -151,7 +153,7 @@ const Profile = () => {
             onClick={() => navigate(-1)}
             className="mt-4 text-primary hover:text-primary/80"
           >
-            돌아가기
+            {t('profile.goBack')}
           </button>
         </div>
       </div>
@@ -176,7 +178,7 @@ const Profile = () => {
           <ol className="inline-flex items-center space-x-1 md:space-x-3">
             <li className="inline-flex items-center">
               <a href="/" className="text-gray-700 dark:text-gray-400 hover:text-primary">
-                Home
+                {t('common.home')}
               </a>
             </li>
             <li>
@@ -184,7 +186,7 @@ const Profile = () => {
                 <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                 </svg>
-                <span className="ml-1 text-gray-700 dark:text-gray-400 md:ml-2">Profile</span>
+                <span className="ml-1 text-gray-700 dark:text-gray-400 md:ml-2">{t('profile.title')}</span>
               </div>
             </li>
           </ol>
@@ -217,17 +219,17 @@ const Profile = () => {
                 {fullName}
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-1">
-                {profile?.job_title || 'No title'}
+                {profile?.job_title || t('profile.noTitle')}
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-500 mb-4">
-                {profile?.location || currentUser?.email || 'No location'}
+                {profile?.location || currentUser?.email || t('profile.noLocation')}
               </p>
               {canEdit && (
                 <button
                   onClick={() => setIsEditingPersonal(true)}
                   className="w-full px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
                 >
-                  Edit
+                  {t('common.edit')}
                 </button>
               )}
             </div>
@@ -240,14 +242,14 @@ const Profile = () => {
           <div className="bg-white dark:bg-[#282e39] rounded-lg border border-gray-200 dark:border-[#3a3f4a] p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Personal Information
+                {t('profile.personalInformation')}
               </h3>
               {canEdit && !isEditingPersonal && (
                 <button
                   onClick={() => setIsEditingPersonal(true)}
                   className="text-primary hover:text-primary/80 text-sm font-medium"
                 >
-                  Edit
+                  {t('common.edit')}
                 </button>
               )}
             </div>
@@ -257,7 +259,7 @@ const Profile = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      First Name
+                      {t('profile.firstName')}
                     </label>
                     <input
                       type="text"
@@ -269,7 +271,7 @@ const Profile = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Last Name
+                      {t('profile.lastName')}
                     </label>
                     <input
                       type="text"
@@ -282,7 +284,7 @@ const Profile = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email Address
+                    {t('profile.emailAddress')}
                   </label>
                   <input
                     type="email"
@@ -293,7 +295,7 @@ const Profile = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Phone
+                    {t('profile.phone')}
                   </label>
                   <input
                     type="tel"
@@ -305,7 +307,7 @@ const Profile = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Bio
+                    {t('profile.bio')}
                   </label>
                   <textarea
                     name="bio"
@@ -323,36 +325,36 @@ const Profile = () => {
                     }}
                     className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1a1f2e]"
                   >
-                    Close
+                    {t('common.close')}
                   </button>
                   <button
                     onClick={handleSavePersonal}
                     className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
                   >
-                    Save Changes
+                    {t('profile.saveChanges')}
                   </button>
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">First Name</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('profile.firstName')}</p>
                   <p className="text-gray-900 dark:text-white">{profile?.first_name || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Last Name</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('profile.lastName')}</p>
                   <p className="text-gray-900 dark:text-white">{profile?.last_name || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Email address</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('profile.emailAddress')}</p>
                   <p className="text-gray-900 dark:text-white">{currentUser?.email || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Phone</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('profile.phone')}</p>
                   <p className="text-gray-900 dark:text-white">{profile?.phone || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Bio</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('profile.bio')}</p>
                   <p className="text-gray-900 dark:text-white">{profile?.bio || '-'}</p>
                 </div>
               </div>
@@ -362,13 +364,13 @@ const Profile = () => {
           {/* Address */}
           <div className="bg-white dark:bg-[#282e39] rounded-lg border border-gray-200 dark:border-[#3a3f4a] p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Address</h3>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{t('profile.address')}</h3>
               {canEdit && !isEditingAddress && (
                 <button
                   onClick={() => setIsEditingAddress(true)}
                   className="text-primary hover:text-primary/80 text-sm font-medium"
                 >
-                  Edit
+                  {t('common.edit')}
                 </button>
               )}
             </div>
@@ -377,7 +379,7 @@ const Profile = () => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Country
+                    {t('profile.country')}
                   </label>
                   <input
                     type="text"
@@ -389,7 +391,7 @@ const Profile = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    City/State
+                    {t('profile.cityState')}
                   </label>
                   <input
                     type="text"
@@ -401,7 +403,7 @@ const Profile = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Postal Code
+                    {t('profile.postalCode')}
                   </label>
                   <input
                     type="text"
@@ -413,7 +415,7 @@ const Profile = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    TAX ID
+                    {t('profile.taxId')}
                   </label>
                   <input
                     type="text"
@@ -431,32 +433,32 @@ const Profile = () => {
                     }}
                     className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1a1f2e]"
                   >
-                    Close
+                    {t('common.close')}
                   </button>
                   <button
                     onClick={handleSaveAddress}
                     className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
                   >
-                    Save Changes
+                    {t('profile.saveChanges')}
                   </button>
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Country</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('profile.country')}</p>
                   <p className="text-gray-900 dark:text-white">{profile?.country || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">City/State</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('profile.cityState')}</p>
                   <p className="text-gray-900 dark:text-white">{profile?.city_state || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Postal Code</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('profile.postalCode')}</p>
                   <p className="text-gray-900 dark:text-white">{profile?.postal_code || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">TAX ID</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('profile.taxId')}</p>
                   <p className="text-gray-900 dark:text-white">{profile?.tax_id || '-'}</p>
                 </div>
               </div>
@@ -467,12 +469,12 @@ const Profile = () => {
           {canEdit && (
             <div className="bg-white dark:bg-[#282e39] rounded-lg border border-gray-200 dark:border-[#3a3f4a] p-6">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-                Social Links
+                {t('profile.socialLinks')}
               </h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Facebook
+                    {t('profile.facebook')}
                   </label>
                   <input
                     type="url"
@@ -486,7 +488,7 @@ const Profile = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    X.com
+                    {t('profile.xcom')}
                   </label>
                   <input
                     type="url"
@@ -500,7 +502,7 @@ const Profile = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Linkedin
+                    {t('profile.linkedin')}
                   </label>
                   <input
                     type="url"
@@ -514,7 +516,7 @@ const Profile = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Instagram
+                    {t('profile.instagram')}
                   </label>
                   <input
                     type="url"

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { api } from '../utils/api';
+import { useTranslation } from 'react-i18next';
 
 const Users = () => {
   const { user: currentUser } = useAuth();
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -29,7 +31,7 @@ const Users = () => {
       setUsers(data);
       setError('');
     } catch (err) {
-      setError(err.message || '사용자 목록을 불러오는데 실패했습니다.');
+      setError(err.message || t('users.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -39,7 +41,7 @@ const Users = () => {
     if (isAdmin) {
       fetchUsers();
     } else {
-      setError('관리자 권한이 필요합니다.');
+      setError(t('users.adminRequired'));
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,7 +109,7 @@ const Users = () => {
         await api.put(`/api/users/${selectedUser.id}`, formData);
       } else {
         if (!formData.password) {
-          setError('비밀번호는 필수입니다.');
+          setError(t('users.passwordRequired'));
           return;
         }
         await api.post('/api/users', formData);
@@ -115,19 +117,19 @@ const Users = () => {
       handleCloseModal();
       fetchUsers();
     } catch (err) {
-      setError(err.message || '사용자 저장에 실패했습니다.');
+      setError(err.message || t('users.failedToSave'));
     }
   };
 
   const handleDelete = async (userId) => {
-    if (!window.confirm('정말 이 사용자를 삭제하시겠습니까?')) {
+    if (!window.confirm(t('users.confirmDelete'))) {
       return;
     }
     try {
       await api.delete(`/api/users/${userId}`);
       fetchUsers();
     } catch (err) {
-      setError(err.message || '사용자 삭제에 실패했습니다.');
+      setError(err.message || t('users.failedToDelete'));
     }
   };
 
@@ -136,7 +138,7 @@ const Users = () => {
       await api.post(`/api/users/${userId}/toggle-active`, {});
       fetchUsers();
     } catch (err) {
-      setError(err.message || '상태 변경에 실패했습니다.');
+      setError(err.message || t('users.failedToToggleStatus'));
     }
   };
 
@@ -145,7 +147,7 @@ const Users = () => {
       await api.post(`/api/users/${userId}/toggle-admin`, {});
       fetchUsers();
     } catch (err) {
-      setError(err.message || '권한 변경에 실패했습니다.');
+      setError(err.message || t('users.failedToToggleAdmin'));
     }
   };
 
@@ -153,7 +155,7 @@ const Users = () => {
     return (
       <div className="flex flex-col gap-6 p-6">
         <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-          <p className="text-red-800 dark:text-red-200">관리자 권한이 필요합니다.</p>
+          <p className="text-red-800 dark:text-red-200">{t('users.adminRequired')}</p>
         </div>
       </div>
     );
@@ -164,7 +166,7 @@ const Users = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">로딩 중...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -192,14 +194,14 @@ const Users = () => {
     <div className="flex flex-col gap-6 p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Users</h1>
-          <p className="text-gray-600 dark:text-gray-400">사용자 관리 및 조회</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('users.title')}</h1>
+          <p className="text-gray-600 dark:text-gray-400">{t('users.description')}</p>
         </div>
         <button
           onClick={() => handleOpenModal()}
           className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors"
         >
-          Add New
+          {t('users.addNew')}
         </button>
       </div>
 
@@ -219,7 +221,7 @@ const Users = () => {
           </div>
           <input
             type="text"
-            placeholder="사용자 검색..."
+            placeholder={t('users.searchUsers')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#1a1f28] border border-gray-200 dark:border-[#3a3f4a] rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -233,12 +235,12 @@ const Users = () => {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-[#1a1f28]">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Role</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Created</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('users.name')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('users.email')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('users.role')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('users.status')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('users.created')}</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('users.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-[#3a3f4a]">
@@ -263,7 +265,7 @@ const Users = () => {
                         ? 'bg-purple-500/20 text-purple-400'
                         : 'bg-blue-500/20 text-blue-400'
                     }`}>
-                      {user.is_admin ? 'Admin' : 'User'}
+                      {user.is_admin ? t('users.admin') : t('users.user')}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -274,7 +276,7 @@ const Users = () => {
                           : 'bg-red-500/20 text-red-400'
                       }`}
                     >
-                      {user.is_active ? 'Active' : 'Inactive'}
+                      {user.is_active ? t('users.active') : t('users.inactive')}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
@@ -286,7 +288,7 @@ const Users = () => {
                         onClick={() => handleOpenModal(user)}
                         className="text-primary hover:text-primary/80"
                       >
-                        Edit
+                        {t('users.edit')}
                       </button>
                       {user.id !== currentUser.id && (
                         <>
@@ -298,19 +300,19 @@ const Users = () => {
                                 : 'text-green-400 hover:text-green-300'
                             }`}
                           >
-                            {user.is_active ? 'Deactivate' : 'Activate'}
+                            {user.is_active ? t('users.deactivate') : t('users.activate')}
                           </button>
                           <button
                             onClick={() => handleToggleAdmin(user.id)}
                             className="text-purple-400 hover:text-purple-300"
                           >
-                            {user.is_admin ? 'Remove Admin' : 'Make Admin'}
+                            {user.is_admin ? t('users.removeAdmin') : t('users.makeAdmin')}
                           </button>
                           <button
                             onClick={() => handleDelete(user.id)}
                             className="text-red-400 hover:text-red-300"
                           >
-                            Delete
+                            {t('users.delete')}
                           </button>
                         </>
                       )}
@@ -324,7 +326,7 @@ const Users = () => {
         {/* Pagination */}
         <div className="bg-gray-50 dark:bg-[#1a1f28] px-6 py-4 flex items-center justify-between border-t border-gray-200 dark:border-[#3a3f4a]">
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            총 <span className="font-medium text-gray-900 dark:text-white">{filteredUsers.length}</span>명의 사용자
+            {t('users.totalUsers')} <span className="font-medium text-gray-900 dark:text-white">{filteredUsers.length}</span>{t('users.usersCount')}
           </div>
         </div>
       </div>
@@ -336,12 +338,12 @@ const Users = () => {
             <div className="fixed inset-0 bg-black opacity-50" onClick={handleCloseModal}></div>
             <div className="relative bg-white dark:bg-[#282e39] rounded-lg shadow-xl max-w-md w-full p-6 z-50">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                {isEditMode ? '사용자 수정' : '새 사용자 추가'}
+                {isEditMode ? t('users.editUser') : t('users.addNewUser')}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email *
+                    {t('users.emailLabel')} *
                   </label>
                   <input
                     type="email"
@@ -354,7 +356,7 @@ const Users = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Full Name
+                    {t('users.fullName')}
                   </label>
                   <input
                     type="text"
@@ -366,7 +368,7 @@ const Users = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Password {isEditMode ? '(변경 시에만 입력)' : '*'}
+                    {t('users.password')} {isEditMode ? t('users.passwordOptional') : '*'}
                   </label>
                   <input
                     type="password"
@@ -386,7 +388,7 @@ const Users = () => {
                       onChange={handleChange}
                       className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                     />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">관리자</span>
+                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{t('users.isAdmin')}</span>
                   </label>
                   <label className="flex items-center">
                     <input
@@ -396,7 +398,7 @@ const Users = () => {
                       onChange={handleChange}
                       className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                     />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">활성화</span>
+                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{t('users.isActive')}</span>
                   </label>
                 </div>
                 <div className="flex justify-end space-x-3 pt-4">
@@ -405,13 +407,13 @@ const Users = () => {
                     onClick={handleCloseModal}
                     className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1a1f2e]"
                   >
-                    Cancel
+                    {t('common.cancel')}
                   </button>
                   <button
                     type="submit"
                     className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
                   >
-                    {isEditMode ? 'Update' : 'Create'}
+                    {isEditMode ? t('users.update') : t('users.create')}
                   </button>
                 </div>
               </form>

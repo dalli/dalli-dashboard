@@ -1,9 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const stats = [
     {
-      title: 'Total Revenue',
+      title: t('dashboard.totalRevenue'),
       value: '$45,231',
       change: '+20.1%',
       trend: 'up',
@@ -14,7 +16,7 @@ const Dashboard = () => {
       ),
     },
     {
-      title: 'Subscriptions',
+      title: t('dashboard.subscriptions'),
       value: '2,350',
       change: '+180.1%',
       trend: 'up',
@@ -25,7 +27,7 @@ const Dashboard = () => {
       ),
     },
     {
-      title: 'Sales',
+      title: t('dashboard.sales'),
       value: '12,234',
       change: '+19%',
       trend: 'up',
@@ -36,7 +38,7 @@ const Dashboard = () => {
       ),
     },
     {
-      title: 'Active Now',
+      title: t('dashboard.activeNow'),
       value: '573',
       change: '+201',
       trend: 'up',
@@ -59,8 +61,8 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col gap-6 p-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Dashboard</h1>
-        <p className="text-gray-600 dark:text-gray-400">Welcome back! Here's what's happening today.</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('dashboard.title')}</h1>
+        <p className="text-gray-600 dark:text-gray-400">{t('dashboard.welcome')}</p>
       </div>
 
       {/* Stats Grid */}
@@ -85,20 +87,20 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Chart Placeholder */}
         <div className="bg-white dark:bg-[#282e39] rounded-lg p-6 border border-gray-200 dark:border-[#3a3f4a] transition-colors">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Revenue Overview</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{t('dashboard.revenueOverview')}</h2>
           <div className="h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
             <div className="text-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 256 256" className="mx-auto mb-2">
                 <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm48-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h40A8,8,0,0,1,176,128Z"></path>
               </svg>
-              <p>Chart visualization</p>
+              <p>{t('dashboard.chartVisualization')}</p>
             </div>
           </div>
         </div>
 
         {/* Recent Sales */}
         <div className="bg-white dark:bg-[#282e39] rounded-lg p-6 border border-gray-200 dark:border-[#3a3f4a] transition-colors">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Recent Sales</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{t('dashboard.recentSales')}</h2>
           <div className="space-y-4">
             {recentSales.map((sale, index) => (
               <div key={index} className="flex items-center justify-between">
@@ -120,13 +122,13 @@ const Dashboard = () => {
 
       {/* Activity Feed */}
       <div className="bg-white dark:bg-[#282e39] rounded-lg p-6 border border-gray-200 dark:border-[#3a3f4a] transition-colors">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{t('dashboard.recentActivity')}</h2>
         <div className="space-y-4">
           {[
-            { action: 'New order received', time: '2 minutes ago', type: 'order' },
-            { action: 'Payment processed', time: '15 minutes ago', type: 'payment' },
-            { action: 'New customer registered', time: '1 hour ago', type: 'user' },
-            { action: 'Product updated', time: '2 hours ago', type: 'product' },
+            { action: t('dashboard.newOrderReceived'), time: t('dashboard.minutesAgo', { count: 2 }), type: 'order' },
+            { action: t('dashboard.paymentProcessed'), time: t('dashboard.minutesAgo', { count: 15 }), type: 'payment' },
+            { action: t('dashboard.newCustomerRegistered'), time: t('dashboard.hourAgo'), type: 'user' },
+            { action: t('dashboard.productUpdated'), time: t('dashboard.hoursAgo', { count: 2 }), type: 'product' },
           ].map((activity, index) => (
             <div key={index} className="flex items-center gap-3 pb-4 border-b border-gray-200 dark:border-[#3a3f4a] last:border-0">
               <div className="w-2 h-2 rounded-full bg-blue-500"></div>

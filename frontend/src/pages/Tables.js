@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Tables = () => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
 
   const tableData = [
@@ -25,11 +27,11 @@ const Tables = () => {
     <div className="flex flex-col gap-6 p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Tables</h1>
-          <p className="text-gray-600 dark:text-gray-400">Manage and view all your data in organized tables.</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('tables.title')}</h1>
+          <p className="text-gray-600 dark:text-gray-400">{t('tables.description')}</p>
         </div>
         <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white rounded-lg transition-colors">
-          Add New
+          {t('tables.addNew')}
         </button>
       </div>
 
@@ -45,7 +47,7 @@ const Tables = () => {
               </div>
               <input
                 type="text"
-                placeholder="Search users..."
+                placeholder={t('tables.searchUsers')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#1a1f28] border border-gray-200 dark:border-[#3a3f4a] rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -53,15 +55,15 @@ const Tables = () => {
             </div>
           </div>
           <select className="px-4 py-2 bg-gray-50 dark:bg-[#1a1f28] border border-gray-200 dark:border-[#3a3f4a] rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">All Roles</option>
-            <option value="Admin">Admin</option>
-            <option value="Editor">Editor</option>
-            <option value="User">User</option>
+            <option value="">{t('tables.allRoles')}</option>
+            <option value="Admin">{t('tables.admin')}</option>
+            <option value="Editor">{t('tables.editor')}</option>
+            <option value="User">{t('tables.user')}</option>
           </select>
           <select className="px-4 py-2 bg-gray-50 dark:bg-[#1a1f28] border border-gray-200 dark:border-[#3a3f4a] rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">All Status</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
+            <option value="">{t('tables.allStatus')}</option>
+            <option value="Active">{t('tables.active')}</option>
+            <option value="Inactive">{t('tables.inactive')}</option>
           </select>
         </div>
       </div>
@@ -72,12 +74,12 @@ const Tables = () => {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-[#1a1f28]">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Role</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('tables.name')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('tables.email')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('tables.role')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('tables.status')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('tables.date')}</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('tables.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-[#3a3f4a]">
@@ -96,7 +98,7 @@ const Tables = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-500/20 text-blue-400">
-                      {row.role}
+                      {row.role === 'Admin' ? t('tables.admin') : row.role === 'Editor' ? t('tables.editor') : t('tables.user')}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -107,13 +109,13 @@ const Tables = () => {
                           : 'bg-red-500/20 text-red-400'
                       }`}
                     >
-                      {row.status}
+                      {row.status === 'Active' ? t('tables.active') : t('tables.inactive')}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">{row.date}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-400 hover:text-blue-300 mr-4">Edit</button>
-                    <button className="text-red-400 hover:text-red-300">Delete</button>
+                    <button className="text-blue-400 hover:text-blue-300 mr-4">{t('common.edit')}</button>
+                    <button className="text-red-400 hover:text-red-300">{t('common.delete')}</button>
                   </td>
                 </tr>
               ))}
@@ -123,15 +125,15 @@ const Tables = () => {
         {/* Pagination */}
         <div className="bg-gray-50 dark:bg-[#1a1f28] px-6 py-4 flex items-center justify-between border-t border-gray-200 dark:border-[#3a3f4a]">
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            Showing <span className="font-medium text-gray-900 dark:text-white">1</span> to <span className="font-medium text-gray-900 dark:text-white">8</span> of{' '}
-            <span className="font-medium text-gray-900 dark:text-white">{filteredData.length}</span> results
+            {t('tables.showing')} <span className="font-medium text-gray-900 dark:text-white">1</span> {t('tables.to')} <span className="font-medium text-gray-900 dark:text-white">8</span> {t('tables.of')}{' '}
+            <span className="font-medium text-gray-900 dark:text-white">{filteredData.length}</span> {t('tables.results')}
           </div>
           <div className="flex gap-2">
             <button className="px-3 py-1 bg-white dark:bg-[#282e39] border border-gray-200 dark:border-[#3a3f4a] rounded text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors">
-              Previous
+              {t('tables.previous')}
             </button>
             <button className="px-3 py-1 bg-white dark:bg-[#282e39] border border-gray-200 dark:border-[#3a3f4a] rounded text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors">
-              Next
+              {t('tables.next')}
             </button>
           </div>
         </div>

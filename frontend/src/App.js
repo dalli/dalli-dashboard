@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { LanguageProvider } from './contexts/LanguageContext';
+import './i18n/config';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
@@ -26,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">로딩 중...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
         </div>
       </div>
     );
@@ -43,9 +45,10 @@ function App() {
   };
 
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <Router>
+    <LanguageProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <Router>
           <Routes>
             {/* 인증 페이지들 (레이아웃 없음) */}
             <Route path="/signin" element={<Signin />} />
@@ -97,8 +100,9 @@ function App() {
             />
           </Routes>
         </Router>
-      </AuthProvider>
-    </ThemeProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }
 
