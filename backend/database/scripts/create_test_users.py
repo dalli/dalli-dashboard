@@ -2,17 +2,24 @@
 """
 테스트 사용자 생성 스크립트
 admin@example.com과 test@example.com 사용자를 생성합니다.
+
+실행 방법:
+    python -m database.scripts.create_test_users
+    또는
+    cd backend && python database/scripts/create_test_users.py
 """
 import sys
 import os
 
 # 프로젝트 루트를 Python 경로에 추가
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from database import SessionLocal, init_db
-from models import User
+from database.models import User
+
 
 def create_test_users():
+    """테스트 사용자 생성 함수"""
     # 데이터베이스 초기화
     init_db()
     
@@ -58,8 +65,8 @@ def create_test_users():
         db.commit()
         print("\n✅ 테스트 사용자 생성이 완료되었습니다!")
         print("\n로그인 정보:")
-        print("  - admin@example.com / admin123")
-        print("  - test@example.com / test123")
+        print("  - admin@example.com / admin123 (관리자)")
+        print("  - test@example.com / test123 (일반 사용자)")
         
     except Exception as e:
         db.rollback()
@@ -67,6 +74,7 @@ def create_test_users():
         sys.exit(1)
     finally:
         db.close()
+
 
 if __name__ == "__main__":
     create_test_users()

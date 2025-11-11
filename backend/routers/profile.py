@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from typing import Optional
 
 from database import get_db
-from models import User, Profile
-from schemas import ProfileResponse, ProfileUpdate
+from database.models import User, Profile
+from database.schemas import ProfileResponse, ProfileUpdate
 from auth import get_current_user
 
 router = APIRouter(prefix="/api/profile", tags=["profile"])
@@ -40,7 +40,7 @@ async def get_profile(user_id: int, current_user: User = Depends(get_current_use
         db.refresh(profile)
     
     # 프로파일 응답에 사용자 정보 포함
-    from schemas import ProfileResponse
+    from database.schemas import ProfileResponse
     profile_dict = {
         "id": profile.id,
         "user_id": profile.user_id,

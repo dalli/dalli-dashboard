@@ -9,8 +9,8 @@ import io
 import base64
 
 from database import get_db
-from models import User
-from schemas import (
+from database.models import User
+from database.schemas import (
     UserCreate, UserResponse, UserLogin, Token,
     ResetPasswordRequest, ResetPassword, TwoFactorVerify, TwoFactorSetup
 )

@@ -4,8 +4,8 @@ from typing import List, Optional
 from sqlalchemy import or_
 
 from database import get_db
-from models import User
-from schemas import UserCreate, UserResponse
+from database.models import User
+from database.schemas import UserCreate, UserResponse
 from auth import get_current_user
 
 router = APIRouter(prefix="/api/users", tags=["users"])

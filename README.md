@@ -5,10 +5,22 @@
 ## 프로젝트 구조
 
 ```
-dashboard/
-├── frontend/     # React 프론트엔드
-├── backend/      # FastAPI 백엔드
-└── docker-compose.yaml  # Docker Compose 설정
+dalli-dashboard/
+├── frontend/              # React 프론트엔드
+│   └── src/
+│       ├── components/   # UI 컴포넌트
+│       ├── contexts/     # Context API
+│       ├── pages/        # 페이지 컴포넌트
+│       └── utils/        # 유틸리티 함수
+├── backend/              # FastAPI 백엔드
+│   ├── database/         # 데이터베이스 패키지
+│   │   ├── models.py    # DB 모델
+│   │   ├── schemas.py   # API 스키마
+│   │   └── scripts/     # DB 스크립트
+│   ├── routers/          # API 라우터
+│   ├── main.py           # FastAPI 앱
+│   └── auth.py           # 인증 로직
+└── docker-compose.yaml   # Docker Compose 설정
 ```
 
 ## 🐳 Docker로 전체 실행 (권장)
@@ -74,13 +86,25 @@ FastAPI 기반 백엔드 API 서버입니다.
 
 ```bash
 cd backend
+
+# 의존성 설치
 pip install -r requirements.txt
+
+# 데이터베이스 초기화
+python -m database.scripts.init_db
+
+# 테스트 사용자 생성
+python -m database.scripts.create_test_users
+
+# 서버 실행
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 백엔드는 `http://localhost:8000`에서 실행됩니다.
 
 API 문서는 `http://localhost:8000/docs`에서 확인할 수 있습니다.
+
+자세한 내용은 [backend/README.md](backend/README.md)를 참고하세요.
 
 ### PostgreSQL
 

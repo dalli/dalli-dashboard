@@ -1,3 +1,7 @@
+"""
+Database 패키지
+데이터베이스 연결, 모델, 스키마를 관리합니다.
+"""
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -16,6 +20,7 @@ Base = declarative_base()
 
 
 def get_db():
+    """데이터베이스 세션 의존성"""
     db = SessionLocal()
     try:
         yield db
@@ -24,5 +29,7 @@ def get_db():
 
 
 def init_db():
+    """데이터베이스 초기화 - 모든 테이블 생성"""
+    from database.models import User, Profile
     Base.metadata.create_all(bind=engine)
 

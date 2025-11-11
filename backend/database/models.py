@@ -1,3 +1,6 @@
+"""
+데이터베이스 모델 정의
+"""
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.sql import func
 from database import Base
@@ -5,6 +8,7 @@ import bcrypt
 
 
 class User(Base):
+    """사용자 모델"""
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -22,14 +26,17 @@ class User(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     def verify_password(self, password: str) -> bool:
+        """비밀번호 검증"""
         return bcrypt.checkpw(password.encode('utf-8'), self.hashed_password.encode('utf-8'))
 
     def set_password(self, password: str):
+        """비밀번호 해싱 및 저장"""
         hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         self.hashed_password = hashed.decode('utf-8')
 
 
 class Profile(Base):
+    """사용자 프로필 모델"""
     __tablename__ = "profiles"
 
     id = Column(Integer, primary_key=True, index=True)
