@@ -238,7 +238,14 @@
     "titleAndContentRequired": "Title and content are required",
     "editorRequired": "Editor or admin privileges required",
     "publish": "Publish",
-    "unpublish": "Unpublish"
+    "unpublish": "Unpublish",
+    "category": "Category",
+    "selectCategory": "Select Category",
+    "noCategory": "No Category",
+    "tags": "Tags",
+    "addTag": "Add Tag",
+    "tagPlaceholder": "Enter a tag and press Enter",
+    "removeTag": "Remove Tag"
   },
   "comments": {
     "title": "Comments",

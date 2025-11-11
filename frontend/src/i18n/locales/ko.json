@@ -238,7 +238,14 @@
     "titleAndContentRequired": "제목과 내용은 필수입니다",
     "editorRequired": "편집자 또는 관리자 권한이 필요합니다",
     "publish": "발행",
-    "unpublish": "발행 취소"
+    "unpublish": "발행 취소",
+    "category": "카테고리",
+    "selectCategory": "카테고리 선택",
+    "noCategory": "카테고리 없음",
+    "tags": "태그",
+    "addTag": "태그 추가",
+    "tagPlaceholder": "태그를 입력하고 Enter를 누르세요",
+    "removeTag": "태그 제거"
   },
   "comments": {
     "title": "댓글",

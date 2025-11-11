@@ -145,6 +145,8 @@ const Posts = () => {
             <thead className="bg-gray-50 dark:bg-[#1a1f28]">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('posts.title')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('posts.category')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('posts.tags')}</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('posts.author')}</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('posts.status')}</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">{t('posts.createdAt')}</th>
@@ -154,7 +156,7 @@ const Posts = () => {
             <tbody className="divide-y divide-gray-200 dark:divide-[#3a3f4a]">
               {filteredPosts.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan="7" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                     {t('posts.noPosts')}
                   </td>
                 </tr>
@@ -164,6 +166,31 @@ const Posts = () => {
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900 dark:text-white">{post.title}</div>
                       <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{post.slug}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      {post.category ? (
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-purple-500/20 text-purple-400">
+                          {post.category.name}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{t('posts.noCategory')}</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-wrap gap-1">
+                        {post.tags && post.tags.length > 0 ? (
+                          post.tags.map((tag) => (
+                            <span
+                              key={tag.id}
+                              className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-blue-500/20 text-blue-400"
+                            >
+                              {tag.name}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-xs text-gray-500 dark:text-gray-400">-</span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-700 dark:text-gray-300">

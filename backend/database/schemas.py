@@ -158,6 +158,7 @@ class PostBase(BaseModel):
     slug: str
     category_id: Optional[int] = None
     tag_ids: Optional[List[int]] = None
+    tag_names: Optional[List[str]] = None  # 새 태그 이름 목록
 
 
 class PostCreate(PostBase):
@@ -172,6 +173,7 @@ class PostUpdate(BaseModel):
     slug: Optional[str] = None
     category_id: Optional[int] = None
     tag_ids: Optional[List[int]] = None
+    tag_names: Optional[List[str]] = None  # 새 태그 이름 목록
 
 
 class UserInfo(BaseModel):

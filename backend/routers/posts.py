@@ -141,13 +141,39 @@ async def create_post(
     db.refresh(new_post)
     
     # 태그 연결
+    tag_ids_to_link = []
+    
+    # 기존 태그 ID 연결
     if post_data.tag_ids:
         for tag_id in post_data.tag_ids:
             tag = db.query(Tag).filter(Tag.id == tag_id).first()
             if tag:
-                post_tag = PostTag(post_id=new_post.id, tag_id=tag_id)
-                db.add(post_tag)
-        db.commit()
+                tag_ids_to_link.append(tag_id)
+    
+    # 새 태그 이름으로 태그 생성 및 연결
+    if post_data.tag_names:
+        for tag_name in post_data.tag_names:
+            tag_name = tag_name.strip()
+            if tag_name:
+                # 기존 태그 확인
+                tag_slug = slugify(tag_name)
+                existing_tag = db.query(Tag).filter(Tag.slug == tag_slug).first()
+                if existing_tag:
+                    if existing_tag.id not in tag_ids_to_link:
+                        tag_ids_to_link.append(existing_tag.id)
+                else:
+                    # 새 태그 생성
+                    new_tag = Tag(name=tag_name, slug=tag_slug)
+                    db.add(new_tag)
+                    db.flush()
+                    tag_ids_to_link.append(new_tag.id)
+    
+    # 태그 연결
+    for tag_id in tag_ids_to_link:
+        post_tag = PostTag(post_id=new_post.id, tag_id=tag_id)
+        db.add(post_tag)
+    
+    db.commit()
     
     new_post.author = current_user
     new_post.editors = []
@@ -220,15 +246,41 @@ async def update_post(
             db.add(editor)
     
     # 태그 업데이트
-    if post_data.tag_ids is not None:
+    if post_data.tag_ids is not None or post_data.tag_names is not None:
         # 기존 태그 삭제
         db.query(PostTag).filter(PostTag.post_id == post_id).delete()
-        # 새 태그 연결
-        for tag_id in post_data.tag_ids:
-            tag = db.query(Tag).filter(Tag.id == tag_id).first()
-            if tag:
-                post_tag = PostTag(post_id=post_id, tag_id=tag_id)
-                db.add(post_tag)
+        
+        tag_ids_to_link = []
+        
+        # 기존 태그 ID 연결
+        if post_data.tag_ids:
+            for tag_id in post_data.tag_ids:
+                tag = db.query(Tag).filter(Tag.id == tag_id).first()
+                if tag:
+                    tag_ids_to_link.append(tag_id)
+        
+        # 새 태그 이름으로 태그 생성 및 연결
+        if post_data.tag_names:
+            for tag_name in post_data.tag_names:
+                tag_name = tag_name.strip()
+                if tag_name:
+                    # 기존 태그 확인
+                    tag_slug = slugify(tag_name)
+                    existing_tag = db.query(Tag).filter(Tag.slug == tag_slug).first()
+                    if existing_tag:
+                        if existing_tag.id not in tag_ids_to_link:
+                            tag_ids_to_link.append(existing_tag.id)
+                    else:
+                        # 새 태그 생성
+                        new_tag = Tag(name=tag_name, slug=tag_slug)
+                        db.add(new_tag)
+                        db.flush()
+                        tag_ids_to_link.append(new_tag.id)
+        
+        # 태그 연결
+        for tag_id in tag_ids_to_link:
+            post_tag = PostTag(post_id=post_id, tag_id=tag_id)
+            db.add(post_tag)
     
     db.commit()
     db.refresh(post)

@@ -238,7 +238,14 @@
     "titleAndContentRequired": "タイトルとコンテンツは必須です",
     "editorRequired": "編集者または管理者権限が必要です",
     "publish": "公開",
-    "unpublish": "非公開"
+    "unpublish": "非公開",
+    "category": "カテゴリ",
+    "selectCategory": "カテゴリを選択",
+    "noCategory": "カテゴリなし",
+    "tags": "タグ",
+    "addTag": "タグを追加",
+    "tagPlaceholder": "タグを入力してEnterを押してください",
+    "removeTag": "タグを削除"
   },
   "comments": {
     "title": "コメント",
