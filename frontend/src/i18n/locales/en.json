@@ -12,7 +12,9 @@
     "delete": "Delete",
     "loading": "Loading...",
     "home": "Home",
-    "user": "User"
+    "user": "User",
+    "view": "View",
+    "back": "Back"
   },
   "sidebar": {
     "dashboard": "Dashboard",
@@ -20,6 +22,7 @@
     "charts": "Charts",
     "uiElements": "UI Elements",
     "users": "Users",
+    "posts": "Posts",
     "tables": "Tables"
   },
   "dashboard": {
@@ -202,6 +205,49 @@
     "reset": "Reset",
     "agreeTerms": "I agree to the terms and conditions",
     "subscribeNewsletter": "Subscribe to newsletter"
+  },
+  "posts": {
+    "title": "Posts",
+    "description": "Manage and view all blog posts.",
+    "newPost": "New Post",
+    "editPost": "Edit Post",
+    "createNewPost": "Create a new blog post",
+    "editPostDescription": "Edit the blog post",
+    "searchPosts": "Search posts...",
+    "allPosts": "All Posts",
+    "published": "Published",
+    "draft": "Draft",
+    "author": "Author",
+    "status": "Status",
+    "createdAt": "Created At",
+    "actions": "Actions",
+    "noPosts": "No posts found",
+    "by": "By",
+    "slug": "Slug",
+    "optional": "Optional",
+    "slugPlaceholder": "Auto-generated from title if empty",
+    "content": "Content",
+    "contentPlaceholder": "Write your post content here...",
+    "create": "Create",
+    "failedToCreate": "Failed to create post",
+    "failedToUpdate": "Failed to update post",
+    "failedToLoad": "Failed to load post",
+    "failedToDelete": "Failed to delete post",
+    "failedToPublish": "Failed to publish/unpublish post",
+    "confirmDelete": "Are you sure you want to delete this post?",
+    "titleAndContentRequired": "Title and content are required",
+    "editorRequired": "Editor or admin privileges required",
+    "publish": "Publish",
+    "unpublish": "Unpublish"
+  },
+  "comments": {
+    "title": "Comments",
+    "placeholder": "Write a comment...",
+    "submit": "Submit Comment",
+    "noComments": "No comments yet",
+    "failedToCreate": "Failed to create comment",
+    "failedToDelete": "Failed to delete comment",
+    "confirmDelete": "Are you sure you want to delete this comment?"
   }
 }
 

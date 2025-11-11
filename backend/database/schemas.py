@@ -3,7 +3,7 @@ Pydantic 스키마 정의
 API 요청/응답 데이터 검증에 사용됩니다.
 """
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 
@@ -102,6 +102,125 @@ class ProfileResponse(ProfileBase):
     user_id: int
     created_at: datetime
     updated_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+# Category 스키마
+class CategoryBase(BaseModel):
+    """카테고리 기본 스키마"""
+    name: str
+    slug: str
+    description: Optional[str] = None
+
+
+class CategoryCreate(CategoryBase):
+    """카테고리 생성 스키마"""
+    pass
+
+
+class CategoryResponse(CategoryBase):
+    """카테고리 응답 스키마"""
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# Tag 스키마
+class TagBase(BaseModel):
+    """태그 기본 스키마"""
+    name: str
+    slug: str
+
+
+class TagCreate(TagBase):
+    """태그 생성 스키마"""
+    pass
+
+
+class TagResponse(TagBase):
+    """태그 응답 스키마"""
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# Post 스키마
+class PostBase(BaseModel):
+    """포스트 기본 스키마"""
+    title: str
+    content: str
+    slug: str
+    category_id: Optional[int] = None
+    tag_ids: Optional[List[int]] = None
+
+
+class PostCreate(PostBase):
+    """포스트 생성 스키마"""
+    pass
+
+
+class PostUpdate(BaseModel):
+    """포스트 업데이트 스키마"""
+    title: Optional[str] = None
+    content: Optional[str] = None
+    slug: Optional[str] = None
+    category_id: Optional[int] = None
+    tag_ids: Optional[List[int]] = None
+
+
+class UserInfo(BaseModel):
+    """사용자 정보 스키마 (포스트 응답용)"""
+    id: int
+    email: str
+    full_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class PostResponse(PostBase):
+    """포스트 응답 스키마"""
+    id: int
+    is_published: bool
+    author_id: int
+    category_id: Optional[int] = None
+    published_at: Optional[datetime] = None
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    author: Optional[UserInfo] = None
+    category: Optional[CategoryResponse] = None
+    tags: Optional[List[TagResponse]] = None
+    editors: Optional[List[UserInfo]] = None
+
+    class Config:
+        from_attributes = True
+
+
+# Comment 스키마
+class CommentBase(BaseModel):
+    """댓글 기본 스키마"""
+    content: str
+
+
+class CommentCreate(CommentBase):
+    """댓글 생성 스키마"""
+    pass
+
+
+class CommentResponse(CommentBase):
+    """댓글 응답 스키마"""
+    id: int
+    post_id: int
+    user_id: int
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    user: Optional[UserInfo] = None
 
     class Config:
         from_attributes = True

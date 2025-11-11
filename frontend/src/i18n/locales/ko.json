@@ -12,7 +12,9 @@
     "delete": "삭제",
     "loading": "로딩 중...",
     "home": "홈",
-    "user": "사용자"
+    "user": "사용자",
+    "view": "보기",
+    "back": "뒤로"
   },
   "sidebar": {
     "dashboard": "대시보드",
@@ -20,6 +22,7 @@
     "charts": "차트",
     "uiElements": "UI 요소",
     "users": "사용자",
+    "posts": "게시글",
     "tables": "테이블"
   },
   "dashboard": {
@@ -202,6 +205,49 @@
     "reset": "초기화",
     "agreeTerms": "약관에 동의합니다",
     "subscribeNewsletter": "뉴스레터 구독"
+  },
+  "posts": {
+    "title": "게시글",
+    "description": "모든 블로그 게시글을 관리하고 조회하세요.",
+    "newPost": "새 게시글",
+    "editPost": "게시글 수정",
+    "createNewPost": "새 블로그 게시글 작성",
+    "editPostDescription": "블로그 게시글 수정",
+    "searchPosts": "게시글 검색...",
+    "allPosts": "모든 게시글",
+    "published": "발행됨",
+    "draft": "초안",
+    "author": "작성자",
+    "status": "상태",
+    "createdAt": "생성일",
+    "actions": "작업",
+    "noPosts": "게시글이 없습니다",
+    "by": "작성",
+    "slug": "슬러그",
+    "optional": "선택사항",
+    "slugPlaceholder": "비어있으면 제목에서 자동 생성",
+    "content": "내용",
+    "contentPlaceholder": "게시글 내용을 작성하세요...",
+    "create": "생성",
+    "failedToCreate": "게시글 생성에 실패했습니다",
+    "failedToUpdate": "게시글 업데이트에 실패했습니다",
+    "failedToLoad": "게시글을 불러오는데 실패했습니다",
+    "failedToDelete": "게시글 삭제에 실패했습니다",
+    "failedToPublish": "게시글 발행/취소에 실패했습니다",
+    "confirmDelete": "정말 이 게시글을 삭제하시겠습니까?",
+    "titleAndContentRequired": "제목과 내용은 필수입니다",
+    "editorRequired": "편집자 또는 관리자 권한이 필요합니다",
+    "publish": "발행",
+    "unpublish": "발행 취소"
+  },
+  "comments": {
+    "title": "댓글",
+    "placeholder": "댓글을 작성하세요...",
+    "submit": "댓글 작성",
+    "noComments": "아직 댓글이 없습니다",
+    "failedToCreate": "댓글 작성에 실패했습니다",
+    "failedToDelete": "댓글 삭제에 실패했습니다",
+    "confirmDelete": "정말 이 댓글을 삭제하시겠습니까?"
   }
 }
 

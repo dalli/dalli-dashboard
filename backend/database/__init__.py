@@ -30,6 +30,6 @@ def get_db():
 
 def init_db():
     """데이터베이스 초기화 - 모든 테이블 생성"""
-    from database.models import User, Profile
+    from database.models import User, Profile, Post, Comment, PostEditor, Category, Tag, PostTag
     Base.metadata.create_all(bind=engine)
 

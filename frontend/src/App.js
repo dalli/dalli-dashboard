@@ -18,6 +18,10 @@ import Signup from './pages/Signup';
 import ResetPassword from './pages/ResetPassword';
 import TwoStepVerification from './pages/TwoStepVerification';
 import Users from './pages/Users';
+import Posts from './pages/Posts';
+import PostNew from './pages/PostNew';
+import PostEdit from './pages/PostEdit';
+import PostDetail from './pages/PostDetail';
 
 // 보호된 라우트 컴포넌트
 const ProtectedRoute = ({ children }) => {
@@ -83,6 +87,10 @@ function App() {
                           <Routes>
                             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                             <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
+                            <Route path="/posts" element={<ProtectedRoute><Posts /></ProtectedRoute>} />
+                            <Route path="/posts/new" element={<ProtectedRoute><PostNew /></ProtectedRoute>} />
+                            <Route path="/posts/edit/:id" element={<ProtectedRoute><PostEdit /></ProtectedRoute>} />
+                            <Route path="/posts/:id" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
                             <Route path="/tables" element={<ProtectedRoute><Tables /></ProtectedRoute>} />
                             <Route path="/forms" element={<ProtectedRoute><Forms /></ProtectedRoute>} />
                             <Route path="/charts" element={<ProtectedRoute><Charts /></ProtectedRoute>} />

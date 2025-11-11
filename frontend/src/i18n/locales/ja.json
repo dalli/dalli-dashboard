@@ -12,7 +12,9 @@
     "delete": "削除",
     "loading": "読み込み中...",
     "home": "ホーム",
-    "user": "ユーザー"
+    "user": "ユーザー",
+    "view": "表示",
+    "back": "戻る"
   },
   "sidebar": {
     "dashboard": "ダッシュボード",
@@ -20,6 +22,7 @@
     "charts": "チャート",
     "uiElements": "UI要素",
     "users": "ユーザー",
+    "posts": "投稿",
     "tables": "テーブル"
   },
   "dashboard": {
@@ -202,6 +205,49 @@
     "reset": "リセット",
     "agreeTerms": "利用規約に同意します",
     "subscribeNewsletter": "ニュースレターを購読"
+  },
+  "posts": {
+    "title": "投稿",
+    "description": "すべてのブログ投稿を管理および表示します。",
+    "newPost": "新しい投稿",
+    "editPost": "投稿を編集",
+    "createNewPost": "新しいブログ投稿を作成",
+    "editPostDescription": "ブログ投稿を編集",
+    "searchPosts": "投稿を検索...",
+    "allPosts": "すべての投稿",
+    "published": "公開済み",
+    "draft": "下書き",
+    "author": "作成者",
+    "status": "ステータス",
+    "createdAt": "作成日",
+    "actions": "操作",
+    "noPosts": "投稿が見つかりません",
+    "by": "作成者",
+    "slug": "スラッグ",
+    "optional": "オプション",
+    "slugPlaceholder": "空の場合はタイトルから自動生成",
+    "content": "コンテンツ",
+    "contentPlaceholder": "投稿の内容を記入してください...",
+    "create": "作成",
+    "failedToCreate": "投稿の作成に失敗しました",
+    "failedToUpdate": "投稿の更新に失敗しました",
+    "failedToLoad": "投稿の読み込みに失敗しました",
+    "failedToDelete": "投稿の削除に失敗しました",
+    "failedToPublish": "投稿の公開/非公開に失敗しました",
+    "confirmDelete": "この投稿を削除してもよろしいですか？",
+    "titleAndContentRequired": "タイトルとコンテンツは必須です",
+    "editorRequired": "編集者または管理者権限が必要です",
+    "publish": "公開",
+    "unpublish": "非公開"
+  },
+  "comments": {
+    "title": "コメント",
+    "placeholder": "コメントを記入してください...",
+    "submit": "コメントを送信",
+    "noComments": "コメントはまだありません",
+    "failedToCreate": "コメントの作成に失敗しました",
+    "failedToDelete": "コメントの削除に失敗しました",
+    "confirmDelete": "このコメントを削除してもよろしいですか？"
   }
 }
 

@@ -18,7 +18,16 @@ export const api = {
       config.body = JSON.stringify(options.body);
     }
 
-    const response = await fetch(url, config);
+    let response;
+    try {
+      response = await fetch(url, config);
+    } catch (error) {
+      // 네트워크 오류 처리
+      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+        throw new Error('Network error: Unable to connect to the server. Please check if the backend is running.');
+      }
+      throw error;
+    }
     
     if (!response.ok) {
       const error = await response.json().catch(() => ({ detail: 'An error occurred' }));
