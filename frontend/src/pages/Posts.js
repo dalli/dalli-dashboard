@@ -162,7 +162,11 @@ const Posts = () => {
                 </tr>
               ) : (
                 filteredPosts.map((post) => (
-                  <tr key={post.id} className="hover:bg-gray-50 dark:hover:bg-[#1a1f28] transition-colors">
+                  <tr 
+                    key={post.id} 
+                    className="hover:bg-gray-50 dark:hover:bg-[#1a1f28] transition-colors cursor-pointer"
+                    onClick={() => navigate(`/posts/${post.id}`)}
+                  >
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900 dark:text-white">{post.title}</div>
                       <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{post.slug}</div>
@@ -212,7 +216,7 @@ const Posts = () => {
                       {new Date(post.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => navigate(`/posts/${post.id}`)}
                           className="text-blue-400 hover:text-blue-300"
@@ -222,21 +226,30 @@ const Posts = () => {
                         {isEditorOrAdmin && (
                           <>
                             <button
-                              onClick={() => navigate(`/posts/edit/${post.id}`)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/posts/edit/${post.id}`);
+                              }}
                               className="text-green-400 hover:text-green-300"
                             >
                               {t('common.edit')}
                             </button>
                             {(post.author_id === user?.id || user?.is_admin) && (
                               <button
-                                onClick={() => handleDelete(post.id)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDelete(post.id);
+                                }}
                                 className="text-red-400 hover:text-red-300"
                               >
                                 {t('common.delete')}
                               </button>
                             )}
                             <button
-                              onClick={() => handlePublish(post.id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePublish(post.id);
+                              }}
                               className="text-purple-400 hover:text-purple-300"
                             >
                               {post.is_published ? t('posts.unpublish') : t('posts.publish')}

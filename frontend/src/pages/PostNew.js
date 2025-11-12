@@ -163,11 +163,15 @@ const PostNew = () => {
               className="w-full px-4 py-2 bg-gray-50 dark:bg-[#1a1f28] border border-gray-200 dark:border-[#3a3f4a] rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">{t('posts.selectCategory')}</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>{t('common.loading')}</option>
+              )}
             </select>
           </div>
 
@@ -196,8 +200,15 @@ const PostNew = () => {
             <input
               type="text"
               value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={handleTagInputKeyDown}
+              onChange={(e) => {
+                e.stopPropagation();
+                setTagInput(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                e.stopPropagation();
+                handleTagInputKeyDown(e);
+              }}
+              onClick={(e) => e.stopPropagation()}
               placeholder={t('posts.tagPlaceholder')}
               className="w-full px-4 py-2 bg-gray-50 dark:bg-[#1a1f28] border border-gray-200 dark:border-[#3a3f4a] rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

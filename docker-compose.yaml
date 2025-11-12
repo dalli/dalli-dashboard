@@ -32,7 +32,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-dashboard_user}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dashboard_password}
       - POSTGRES_DB=${POSTGRES_DB:-dashboard_db}
-      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://localhost:80}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://localhost:80,http://localhost}
     ports:
       - "8000:8000"
     depends_on:

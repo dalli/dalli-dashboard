@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+// Docker 환경에서는 nginx 프록시를 통해 /api로 호출
+// 개발 환경에서는 환경변수나 localhost 사용
+const API_BASE_URL = process.env.REACT_APP_API_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000');
 
 export const api = {
   async request(endpoint, options = {}) {

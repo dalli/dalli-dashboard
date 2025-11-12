@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import mermaid from 'mermaid';
 import { api } from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -16,11 +17,53 @@ const PostDetail = () => {
   const [commentContent, setCommentContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [submittingComment, setSubmittingComment] = useState(false);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     fetchPost();
     fetchComments();
   }, [id]);
+
+  useEffect(() => {
+    // Mermaid 초기화
+    if (typeof window !== 'undefined') {
+      mermaid.initialize({ 
+        startOnLoad: true,
+        theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default',
+        securityLevel: 'loose'
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    // Mermaid 다이어그램 렌더링
+    if (contentRef.current && post && typeof window !== 'undefined') {
+      const mermaidElements = contentRef.current.querySelectorAll('.language-mermaid');
+      mermaidElements.forEach((element, index) => {
+        const code = element.textContent;
+        if (code && code.trim()) {
+          const uniqueId = `mermaid-${id}-${index}-${Date.now()}`;
+          const mermaidDiv = document.createElement('div');
+          mermaidDiv.className = 'mermaid';
+          mermaidDiv.id = uniqueId;
+          mermaidDiv.textContent = code.trim();
+          
+          // 기존 pre 요소를 mermaid div로 교체
+          const preElement = element.closest('pre');
+          if (preElement && preElement.parentElement) {
+            preElement.parentElement.replaceChild(mermaidDiv, preElement);
+            
+            // Mermaid 렌더링
+            mermaid.run({
+              nodes: [mermaidDiv]
+            }).catch(err => {
+              console.error('Mermaid rendering error:', err);
+            });
+          }
+        }
+      });
+    }
+  }, [post, id]);
 
   const fetchPost = async () => {
     try {
@@ -132,8 +175,59 @@ const PostDetail = () => {
       </div>
 
       <div className="bg-white dark:bg-[#282e39] rounded-lg p-6 border border-gray-200 dark:border-[#3a3f4a]">
-        <div className="prose dark:prose-invert max-w-none">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+        <div ref={contentRef} className="prose dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-strong:text-gray-900 dark:prose-strong:text-white prose-code:text-gray-900 dark:prose-code:text-white prose-pre:bg-gray-100 dark:prose-pre:bg-[#1a1f28] prose-table:border-gray-300 dark:prose-table:border-[#3a3f4a]">
+          <ReactMarkdown 
+            remarkPlugins={[remarkGfm]}
+            components={{
+              table: ({node, ...props}) => (
+                <div className="overflow-x-auto my-4">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-[#3a3f4a] border border-gray-300 dark:border-[#3a3f4a] rounded-lg" {...props} />
+                </div>
+              ),
+              thead: ({node, ...props}) => (
+                <thead className="bg-gray-50 dark:bg-[#1a1f28]" {...props} />
+              ),
+              tbody: ({node, ...props}) => (
+                <tbody className="bg-white dark:bg-[#282e39] divide-y divide-gray-200 dark:divide-[#3a3f4a]" {...props} />
+              ),
+              th: ({node, ...props}) => (
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider" {...props} />
+              ),
+              td: ({node, ...props}) => (
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300" {...props} />
+              ),
+              code: ({node, inline, className, children, ...props}) => {
+                const match = /language-(\w+)/.exec(className || '');
+                const language = match && match[1];
+                
+                if (!inline && language === 'mermaid') {
+                  return (
+                    <div className="my-4">
+                      <pre className="bg-gray-100 dark:bg-[#1a1f28] p-4 rounded-lg overflow-x-auto">
+                        <code className="language-mermaid" {...props}>
+                          {String(children).replace(/\n$/, '')}
+                        </code>
+                      </pre>
+                    </div>
+                  );
+                }
+                
+                return !inline && match ? (
+                  <pre className="bg-gray-100 dark:bg-[#1a1f28] p-4 rounded-lg overflow-x-auto my-4">
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  </pre>
+                ) : (
+                  <code className="bg-gray-100 dark:bg-[#1a1f28] px-1 py-0.5 rounded text-sm" {...props}>
+                    {children}
+                  </code>
+                );
+              },
+            }}
+          >
+            {post.content}
+          </ReactMarkdown>
         </div>
       </div>
 
