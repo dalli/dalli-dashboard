@@ -138,7 +138,7 @@ const PostDetail = () => {
   const canDelete = user && (post.author_id === user.id || user.is_admin);
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6 p-6 max-w-full overflow-x-hidden">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{post.title}</h1>
@@ -174,8 +174,8 @@ const PostDetail = () => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-[#282e39] rounded-lg p-6 border border-gray-200 dark:border-[#3a3f4a]">
-        <div ref={contentRef} className="prose dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-strong:text-gray-900 dark:prose-strong:text-white prose-code:text-gray-900 dark:prose-code:text-white prose-pre:bg-gray-100 dark:prose-pre:bg-[#1a1f28] prose-table:border-gray-300 dark:prose-table:border-[#3a3f4a]">
+      <div className="bg-white dark:bg-[#282e39] rounded-lg p-6 border border-gray-200 dark:border-[#3a3f4a] max-w-full overflow-x-hidden">
+        <div ref={contentRef} className="prose dark:prose-invert max-w-full prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-strong:text-gray-900 dark:prose-strong:text-white prose-code:text-gray-900 dark:prose-code:text-white prose-pre:bg-gray-100 dark:prose-pre:bg-[#1a1f28] prose-table:border-gray-300 dark:prose-table:border-[#3a3f4a] overflow-x-auto">
           <ReactMarkdown 
             remarkPlugins={[remarkGfm]}
             components={{

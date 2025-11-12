@@ -198,7 +198,7 @@ const PostEdit = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6 p-6 max-w-full overflow-x-hidden">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('posts.editPost')}</h1>
@@ -212,7 +212,7 @@ const PostEdit = () => {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-[#282e39] rounded-lg p-6 border border-gray-200 dark:border-[#3a3f4a]">
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-[#282e39] rounded-lg p-6 border border-gray-200 dark:border-[#3a3f4a] max-w-full overflow-x-hidden">
         <div className="flex flex-col gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
