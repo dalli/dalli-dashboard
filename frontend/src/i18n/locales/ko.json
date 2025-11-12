@@ -7,6 +7,7 @@
     "logout": "로그아웃",
     "edit": "편집",
     "save": "저장",
+    "create": "생성",
     "cancel": "취소",
     "close": "닫기",
     "delete": "삭제",
@@ -24,6 +25,9 @@
     "uiElements": "UI 요소",
     "users": "사용자",
     "posts": "게시글",
+    "postsList": "게시글",
+    "categories": "카테고리",
+    "comments": "댓글",
     "tables": "테이블"
   },
   "dashboard": {
@@ -130,9 +134,11 @@
     "inactive": "비활성",
     "previous": "이전",
     "next": "다음",
-    "showing": "표시 중",
+    "showing": "표시",
     "to": "부터",
-    "of": "중",
+    "of": "까지",
+    "entries": "개 항목",
+    "show": "표시",
     "results": "결과"
   },
   "users": {
@@ -250,12 +256,44 @@
   },
   "comments": {
     "title": "댓글",
+    "description": "모든 댓글을 관리하고 조회하세요.",
     "placeholder": "댓글을 작성하세요...",
     "submit": "댓글 작성",
     "noComments": "아직 댓글이 없습니다",
+    "failedToLoad": "댓글 목록을 불러오는데 실패했습니다",
     "failedToCreate": "댓글 작성에 실패했습니다",
+    "failedToUpdate": "댓글 수정에 실패했습니다",
     "failedToDelete": "댓글 삭제에 실패했습니다",
-    "confirmDelete": "정말 이 댓글을 삭제하시겠습니까?"
+    "confirmDelete": "정말 이 댓글을 삭제하시겠습니까?",
+    "editorRequired": "편집자 또는 관리자 권한이 필요합니다",
+    "searchComments": "댓글 검색...",
+    "content": "내용",
+    "user": "사용자",
+    "post": "게시글",
+    "createdAt": "생성일",
+    "actions": "작업",
+    "editComment": "댓글 수정",
+    "newComment": "새 댓글",
+    "viewPost": "게시글 보기"
+  },
+  "categories": {
+    "title": "카테고리",
+    "description": "모든 카테고리를 관리하고 조회하세요.",
+    "newCategory": "새 카테고리",
+    "editCategory": "카테고리 수정",
+    "searchCategories": "카테고리 검색...",
+    "name": "이름",
+    "slug": "슬러그",
+    "description": "설명",
+    "createdAt": "생성일",
+    "actions": "작업",
+    "noCategories": "카테고리가 없습니다",
+    "failedToLoad": "카테고리 목록을 불러오는데 실패했습니다",
+    "failedToCreate": "카테고리 생성에 실패했습니다",
+    "failedToUpdate": "카테고리 수정에 실패했습니다",
+    "failedToDelete": "카테고리 삭제에 실패했습니다",
+    "confirmDelete": "정말 이 카테고리를 삭제하시겠습니까?",
+    "editorRequired": "편집자 또는 관리자 권한이 필요합니다"
   }
 }
 

@@ -10,6 +10,8 @@ const Users = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -151,6 +153,23 @@ const Users = () => {
     }
   };
 
+  const filteredUsers = users.filter(
+    (user) =>
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.full_name && user.full_name.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  // 페이징 계산
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentUsers = filteredUsers.slice(startIndex, endIndex);
+
+  // 검색어 변경 시 첫 페이지로 이동
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, itemsPerPage]);
+
   if (!isAdmin) {
     return (
       <div className="flex flex-col gap-6 p-6">
@@ -172,11 +191,10 @@ const Users = () => {
     );
   }
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (user.full_name && user.full_name.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const getUserInitials = (user) => {
     if (user.full_name) {
@@ -244,7 +262,7 @@ const Users = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-[#3a3f4a]">
-              {filteredUsers.map((user) => (
+              {currentUsers.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-[#1a1f28] transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -286,33 +304,51 @@ const Users = () => {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleOpenModal(user)}
-                        className="text-primary hover:text-primary/80"
+                        className="text-green-400 hover:text-green-300 transition-colors"
+                        title={t('users.edit')}
                       >
-                        {t('users.edit')}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
+                          <path d="M227.31,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM192,108.68,147.31,64,168,43.31,212.69,88Z"></path>
+                        </svg>
                       </button>
                       {user.id !== currentUser.id && (
                         <>
                           <button
                             onClick={() => handleToggleActive(user.id)}
-                            className={`${
+                            className={`transition-colors ${
                               user.is_active
                                 ? 'text-orange-400 hover:text-orange-300'
                                 : 'text-green-400 hover:text-green-300'
                             }`}
+                            title={user.is_active ? t('users.deactivate') : t('users.activate')}
                           >
-                            {user.is_active ? t('users.deactivate') : t('users.activate')}
+                            {user.is_active ? (
+                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm45.66-61.66a8,8,0,0,1,0,11.32l-32,32a8,8,0,0,1-11.32,0l-16-16a8,8,0,0,1,11.32-11.32L136,180.69l26.34-26.35A8,8,0,0,1,173.66,154.34Z"></path>
+                              </svg>
+                            ) : (
+                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm32-88a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,128Z"></path>
+                              </svg>
+                            )}
                           </button>
                           <button
                             onClick={() => handleToggleAdmin(user.id)}
-                            className="text-purple-400 hover:text-purple-300"
+                            className="text-purple-400 hover:text-purple-300 transition-colors"
+                            title={user.is_admin ? t('users.removeAdmin') : t('users.makeAdmin')}
                           >
-                            {user.is_admin ? t('users.removeAdmin') : t('users.makeAdmin')}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
+                              <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm32-88a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,128Z"></path>
+                            </svg>
                           </button>
                           <button
                             onClick={() => handleDelete(user.id)}
-                            className="text-red-400 hover:text-red-300"
+                            className="text-red-400 hover:text-red-300 transition-colors"
+                            title={t('users.delete')}
                           >
-                            {t('users.delete')}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
+                              <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192Z"></path>
+                            </svg>
                           </button>
                         </>
                       )}
@@ -324,11 +360,82 @@ const Users = () => {
           </table>
         </div>
         {/* Pagination */}
-        <div className="bg-gray-50 dark:bg-[#1a1f28] px-6 py-4 flex items-center justify-between border-t border-gray-200 dark:border-[#3a3f4a]">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {t('users.totalUsers')} <span className="font-medium text-gray-900 dark:text-white">{filteredUsers.length}</span>{t('users.usersCount')}
+        {filteredUsers.length > 0 && (
+          <div className="bg-gray-50 dark:bg-[#1a1f28] px-6 py-4 flex items-center justify-between border-t border-gray-200 dark:border-[#3a3f4a]">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {t('tables.showing')} <span className="font-medium text-gray-900 dark:text-white">{startIndex + 1}</span> {t('tables.to')} <span className="font-medium text-gray-900 dark:text-white">{Math.min(endIndex, filteredUsers.length)}</span> {t('tables.of')}{' '}
+              <span className="font-medium text-gray-900 dark:text-white">{filteredUsers.length}</span> {t('tables.entries')}
+            </div>
+            <div className="flex items-center gap-2">
+              {/* Items per page selector */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('tables.show')}</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => {
+                    setItemsPerPage(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="px-3 py-1 bg-white dark:bg-[#282e39] border border-gray-200 dark:border-[#3a3f4a] rounded text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
+                >
+                  <option value="5">5</option>
+                  <option value="8">8</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                </select>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('tables.entries')}</span>
+              </div>
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 bg-white dark:bg-[#282e39] border border-gray-200 dark:border-[#3a3f4a] rounded text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {t('tables.previous')}
+              </button>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+                  if (
+                    pageNum === 1 ||
+                    pageNum === totalPages ||
+                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => handlePageChange(pageNum)}
+                        className={`px-3 py-1 min-w-[32px] rounded text-sm transition-colors ${
+                          currentPage === pageNum
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white dark:bg-[#282e39] border border-gray-200 dark:border-[#3a3f4a] text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-[#3a3f4a]'
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  } else if (
+                    pageNum === currentPage - 2 ||
+                    pageNum === currentPage + 2
+                  ) {
+                    return (
+                      <span key={pageNum} className="px-2 text-gray-500 dark:text-gray-400">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 bg-white dark:bg-[#282e39] border border-gray-200 dark:border-[#3a3f4a] rounded text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {t('tables.next')}
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Modal */}

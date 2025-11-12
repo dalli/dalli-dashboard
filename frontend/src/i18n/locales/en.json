@@ -14,7 +14,9 @@
     "home": "Home",
     "user": "User",
     "view": "View",
-    "back": "Back"
+    "back": "Back",
+    "list": "List",
+    "create": "Create"
   },
   "sidebar": {
     "dashboard": "Dashboard",
@@ -23,6 +25,9 @@
     "uiElements": "UI Elements",
     "users": "Users",
     "posts": "Posts",
+    "postsList": "Posts",
+    "categories": "Categories",
+    "comments": "Comments",
     "tables": "Tables"
   },
   "dashboard": {
@@ -132,6 +137,8 @@
     "showing": "Showing",
     "to": "to",
     "of": "of",
+    "entries": "entries",
+    "show": "Show",
     "results": "results"
   },
   "users": {
@@ -249,12 +256,44 @@
   },
   "comments": {
     "title": "Comments",
+    "description": "Manage and view all comments.",
     "placeholder": "Write a comment...",
     "submit": "Submit Comment",
     "noComments": "No comments yet",
+    "failedToLoad": "Failed to load comments",
     "failedToCreate": "Failed to create comment",
+    "failedToUpdate": "Failed to update comment",
     "failedToDelete": "Failed to delete comment",
-    "confirmDelete": "Are you sure you want to delete this comment?"
+    "confirmDelete": "Are you sure you want to delete this comment?",
+    "editorRequired": "Editor or admin privileges required",
+    "searchComments": "Search comments...",
+    "content": "Content",
+    "user": "User",
+    "post": "Post",
+    "createdAt": "Created At",
+    "actions": "Actions",
+    "editComment": "Edit Comment",
+    "newComment": "New Comment",
+    "viewPost": "View Post"
+  },
+  "categories": {
+    "title": "Categories",
+    "description": "Manage and view all categories.",
+    "newCategory": "New Category",
+    "editCategory": "Edit Category",
+    "searchCategories": "Search categories...",
+    "name": "Name",
+    "slug": "Slug",
+    "description": "Description",
+    "createdAt": "Created At",
+    "actions": "Actions",
+    "noCategories": "No categories found",
+    "failedToLoad": "Failed to load categories",
+    "failedToCreate": "Failed to create category",
+    "failedToUpdate": "Failed to update category",
+    "failedToDelete": "Failed to delete category",
+    "confirmDelete": "Are you sure you want to delete this category?",
+    "editorRequired": "Editor or admin privileges required"
   }
 }
 

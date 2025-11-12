@@ -14,7 +14,9 @@
     "home": "ホーム",
     "user": "ユーザー",
     "view": "表示",
-    "back": "戻る"
+    "back": "戻る",
+    "list": "一覧",
+    "create": "作成"
   },
   "sidebar": {
     "dashboard": "ダッシュボード",
@@ -23,6 +25,9 @@
     "uiElements": "UI要素",
     "users": "ユーザー",
     "posts": "投稿",
+    "postsList": "投稿",
+    "categories": "カテゴリ",
+    "comments": "コメント",
     "tables": "テーブル"
   },
   "dashboard": {
@@ -132,6 +137,8 @@
     "showing": "表示中",
     "to": "から",
     "of": "の",
+    "entries": "件",
+    "show": "表示",
     "results": "結果"
   },
   "users": {
@@ -249,12 +256,44 @@
   },
   "comments": {
     "title": "コメント",
+    "description": "すべてのコメントを管理および表示します。",
     "placeholder": "コメントを記入してください...",
     "submit": "コメントを送信",
     "noComments": "コメントはまだありません",
+    "failedToLoad": "コメントリストの読み込みに失敗しました",
     "failedToCreate": "コメントの作成に失敗しました",
+    "failedToUpdate": "コメントの更新に失敗しました",
     "failedToDelete": "コメントの削除に失敗しました",
-    "confirmDelete": "このコメントを削除してもよろしいですか？"
+    "confirmDelete": "このコメントを削除してもよろしいですか？",
+    "editorRequired": "編集者または管理者権限が必要です",
+    "searchComments": "コメントを検索...",
+    "content": "内容",
+    "user": "ユーザー",
+    "post": "投稿",
+    "createdAt": "作成日",
+    "actions": "操作",
+    "editComment": "コメント編集",
+    "newComment": "新しいコメント",
+    "viewPost": "投稿を表示"
+  },
+  "categories": {
+    "title": "カテゴリ",
+    "description": "すべてのカテゴリを管理および表示します。",
+    "newCategory": "新しいカテゴリ",
+    "editCategory": "カテゴリ編集",
+    "searchCategories": "カテゴリを検索...",
+    "name": "名前",
+    "slug": "スラッグ",
+    "description": "説明",
+    "createdAt": "作成日",
+    "actions": "操作",
+    "noCategories": "カテゴリが見つかりません",
+    "failedToLoad": "カテゴリリストの読み込みに失敗しました",
+    "failedToCreate": "カテゴリの作成に失敗しました",
+    "failedToUpdate": "カテゴリの更新に失敗しました",
+    "failedToDelete": "カテゴリの削除に失敗しました",
+    "confirmDelete": "このカテゴリを削除してもよろしいですか？",
+    "editorRequired": "編集者または管理者権限が必要です"
   }
 }
 

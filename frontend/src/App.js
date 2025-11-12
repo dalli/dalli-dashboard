@@ -22,6 +22,8 @@ import Posts from './pages/Posts';
 import PostNew from './pages/PostNew';
 import PostEdit from './pages/PostEdit';
 import PostDetail from './pages/PostDetail';
+import Categories from './pages/Categories';
+import Comments from './pages/Comments';
 
 // 보호된 라우트 컴포넌트
 const ProtectedRoute = ({ children }) => {
@@ -91,6 +93,8 @@ function App() {
                             <Route path="/posts/new" element={<ProtectedRoute><PostNew /></ProtectedRoute>} />
                             <Route path="/posts/edit/:id" element={<ProtectedRoute><PostEdit /></ProtectedRoute>} />
                             <Route path="/posts/:id" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
+                            <Route path="/posts/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
+                            <Route path="/posts/comments" element={<ProtectedRoute><Comments /></ProtectedRoute>} />
                             <Route path="/tables" element={<ProtectedRoute><Tables /></ProtectedRoute>} />
                             <Route path="/forms" element={<ProtectedRoute><Forms /></ProtectedRoute>} />
                             <Route path="/charts" element={<ProtectedRoute><Charts /></ProtectedRoute>} />

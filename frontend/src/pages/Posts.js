@@ -12,6 +12,8 @@ const Posts = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [publishedFilter, setPublishedFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const isEditorOrAdmin = user && (user.is_editor || user.is_admin);
 
@@ -75,6 +77,22 @@ const Posts = () => {
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // 페이징 계산
+  const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPosts = filteredPosts.slice(startIndex, endIndex);
+
+  // 검색어나 필터 변경 시 첫 페이지로 이동
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, publishedFilter, itemsPerPage]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   if (loading) {
     return (
@@ -161,7 +179,7 @@ const Posts = () => {
                   </td>
                 </tr>
               ) : (
-                filteredPosts.map((post) => (
+                currentPosts.map((post) => (
                   <tr 
                     key={post.id} 
                     className="hover:bg-gray-50 dark:hover:bg-[#1a1f28] transition-colors cursor-pointer"
@@ -224,9 +242,12 @@ const Posts = () => {
                                 e.stopPropagation();
                                 navigate(`/posts/edit/${post.id}`);
                               }}
-                              className="text-green-400 hover:text-green-300"
+                              className="text-green-400 hover:text-green-300 transition-colors"
+                              title={t('common.edit')}
                             >
-                              {t('common.edit')}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M227.31,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM192,108.68,147.31,64,168,43.31,212.69,88Z"></path>
+                              </svg>
                             </button>
                             {(post.author_id === user?.id || user?.is_admin) && (
                               <button
@@ -234,9 +255,12 @@ const Posts = () => {
                                   e.stopPropagation();
                                   handleDelete(post.id);
                                 }}
-                                className="text-red-400 hover:text-red-300"
+                                className="text-red-400 hover:text-red-300 transition-colors"
+                                title={t('common.delete')}
                               >
-                                {t('common.delete')}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
+                                  <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192Z"></path>
+                                </svg>
                               </button>
                             )}
                             <button
@@ -244,9 +268,18 @@ const Posts = () => {
                                 e.stopPropagation();
                                 handlePublish(post.id);
                               }}
-                              className="text-purple-400 hover:text-purple-300"
+                              className="text-purple-400 hover:text-purple-300 transition-colors"
+                              title={post.is_published ? t('posts.unpublish') : t('posts.publish')}
                             >
-                              {post.is_published ? t('posts.unpublish') : t('posts.publish')}
+                              {post.is_published ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
+                                  <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm48-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V88a8,8,0,0,1,16,0v24h24A8,8,0,0,1,176,128Z"></path>
+                                </svg>
+                              ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
+                                  <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm48-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V88a8,8,0,0,1,16,0v24h24A8,8,0,0,1,176,128Z"></path>
+                                </svg>
+                              )}
                             </button>
                           </>
                         )}
@@ -258,6 +291,83 @@ const Posts = () => {
             </tbody>
           </table>
         </div>
+        {/* Pagination */}
+        {filteredPosts.length > 0 && (
+          <div className="bg-gray-50 dark:bg-[#1a1f28] px-6 py-4 flex items-center justify-between border-t border-gray-200 dark:border-[#3a3f4a]">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {t('tables.showing')} <span className="font-medium text-gray-900 dark:text-white">{startIndex + 1}</span> {t('tables.to')} <span className="font-medium text-gray-900 dark:text-white">{Math.min(endIndex, filteredPosts.length)}</span> {t('tables.of')}{' '}
+              <span className="font-medium text-gray-900 dark:text-white">{filteredPosts.length}</span> {t('tables.entries')}
+            </div>
+            <div className="flex items-center gap-2">
+              {/* Items per page selector */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('tables.show')}</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => {
+                    setItemsPerPage(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="px-3 py-1 bg-white dark:bg-[#282e39] border border-gray-200 dark:border-[#3a3f4a] rounded text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
+                >
+                  <option value="5">5</option>
+                  <option value="8">8</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                </select>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('tables.entries')}</span>
+              </div>
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 bg-white dark:bg-[#282e39] border border-gray-200 dark:border-[#3a3f4a] rounded text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {t('tables.previous')}
+              </button>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+                  if (
+                    pageNum === 1 ||
+                    pageNum === totalPages ||
+                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => handlePageChange(pageNum)}
+                        className={`px-3 py-1 min-w-[32px] rounded text-sm transition-colors ${
+                          currentPage === pageNum
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white dark:bg-[#282e39] border border-gray-200 dark:border-[#3a3f4a] text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-[#3a3f4a]'
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  } else if (
+                    pageNum === currentPage - 2 ||
+                    pageNum === currentPage + 2
+                  ) {
+                    return (
+                      <span key={pageNum} className="px-2 text-gray-500 dark:text-gray-400">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 bg-white dark:bg-[#282e39] border border-gray-200 dark:border-[#3a3f4a] rounded text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {t('tables.next')}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

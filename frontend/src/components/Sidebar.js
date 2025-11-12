@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const Sidebar = ({ onClose }) => {
   const location = useLocation();
   const { t } = useTranslation();
+  const [postsMenuOpen, setPostsMenuOpen] = useState(false);
 
   const menuItems = [
     {
@@ -60,6 +61,12 @@ const Sidebar = ({ onClose }) => {
       ),
       label: t('sidebar.posts'),
       path: '/posts',
+      hasSubmenu: true,
+      submenu: [
+        { label: t('sidebar.postsList'), path: '/posts' },
+        { label: t('sidebar.categories'), path: '/posts/categories' },
+        { label: t('sidebar.comments'), path: '/posts/comments' },
+      ],
     },
     {
       icon: (
@@ -79,6 +86,16 @@ const Sidebar = ({ onClose }) => {
     return location.pathname.startsWith(path);
   };
 
+  const isPostsMenuActive = () => {
+    return location.pathname.startsWith('/posts');
+  };
+
+  React.useEffect(() => {
+    if (isPostsMenuActive()) {
+      setPostsMenuOpen(true);
+    }
+  }, [location.pathname]);
+
   return (
     <div className="flex h-full min-h-screen flex-col justify-between bg-white dark:bg-[#111318] border-r border-gray-200 dark:border-[#282e39] p-4 w-64 transition-colors">
       <div className="flex flex-col gap-4">
@@ -90,24 +107,74 @@ const Sidebar = ({ onClose }) => {
         </div>
         <div className="flex flex-col gap-2">
           {menuItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={() => {
-                // 모바일에서 링크 클릭 시 사이드바 닫기
-                if (window.innerWidth < 1024 && onClose) {
-                  onClose();
-                }
-              }}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                isActive(item.path)
-                  ? 'bg-gray-100 dark:bg-[#282e39] text-gray-900 dark:text-white'
-                  : 'text-gray-600 dark:text-[#9da6b9] hover:bg-gray-100 dark:hover:bg-[#282e39] hover:text-gray-900 dark:hover:text-white'
-              }`}
-            >
-              <div className="flex-shrink-0">{item.icon}</div>
-              <p className="text-sm font-medium leading-normal">{item.label}</p>
-            </Link>
+            <div key={item.path}>
+              {item.hasSubmenu ? (
+                <div>
+                  <button
+                    onClick={() => setPostsMenuOpen(!postsMenuOpen)}
+                    className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg transition-colors ${
+                      isActive(item.path)
+                        ? 'bg-gray-100 dark:bg-[#282e39] text-gray-900 dark:text-white'
+                        : 'text-gray-600 dark:text-[#9da6b9] hover:bg-gray-100 dark:hover:bg-[#282e39] hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex-shrink-0">{item.icon}</div>
+                      <p className="text-sm font-medium leading-normal">{item.label}</p>
+                    </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 256 256"
+                      className={`transition-transform ${postsMenuOpen ? 'rotate-90' : ''}`}
+                    >
+                      <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path>
+                    </svg>
+                  </button>
+                  {postsMenuOpen && (
+                    <div className="ml-4 mt-1 flex flex-col gap-1">
+                      {item.submenu.map((subItem) => (
+                        <Link
+                          key={subItem.path}
+                          to={subItem.path}
+                          onClick={() => {
+                            if (window.innerWidth < 1024 && onClose) {
+                              onClose();
+                            }
+                          }}
+                          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                            location.pathname === subItem.path || (subItem.path === '/posts' && location.pathname.startsWith('/posts') && !location.pathname.startsWith('/posts/categories') && !location.pathname.startsWith('/posts/comments'))
+                              ? 'bg-gray-100 dark:bg-[#282e39] text-gray-900 dark:text-white'
+                              : 'text-gray-600 dark:text-[#9da6b9] hover:bg-gray-100 dark:hover:bg-[#282e39] hover:text-gray-900 dark:hover:text-white'
+                          }`}
+                        >
+                          <p className="text-sm font-medium leading-normal">{subItem.label}</p>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  to={item.path}
+                  onClick={() => {
+                    if (window.innerWidth < 1024 && onClose) {
+                      onClose();
+                    }
+                  }}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                    isActive(item.path)
+                      ? 'bg-gray-100 dark:bg-[#282e39] text-gray-900 dark:text-white'
+                      : 'text-gray-600 dark:text-[#9da6b9] hover:bg-gray-100 dark:hover:bg-[#282e39] hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  <div className="flex-shrink-0">{item.icon}</div>
+                  <p className="text-sm font-medium leading-normal">{item.label}</p>
+                </Link>
+              )}
+            </div>
           ))}
         </div>
       </div>
