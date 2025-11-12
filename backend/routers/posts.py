@@ -341,12 +341,30 @@ async def create_post(
                     db.flush()
                     tag_ids_to_link.append(new_tag.id)
     
-    # 자동 태그 추출 및 추가
+    # 자동 태그 추출 및 추가 (이미 선택된 태그는 제외)
+    # 이미 선택된 태그 이름 목록 생성 (중복 체크용)
+    selected_tag_names = set()
+    if post_data.tag_ids:
+        for tag_id in post_data.tag_ids:
+            tag = db.query(Tag).filter(Tag.id == tag_id).first()
+            if tag:
+                selected_tag_names.add(tag.name.lower())
+                selected_tag_names.add(tag.slug.lower())
+    if post_data.tag_names:
+        for tag_name in post_data.tag_names:
+            tag_name_clean = tag_name.strip().lower()
+            if tag_name_clean:
+                selected_tag_names.add(tag_name_clean)
+                selected_tag_names.add(slugify(tag_name_clean).lower())
+    
     auto_tags = extract_tags_from_content(post_data.title, post_data.content)
     for tag_name in auto_tags:
         tag_name = tag_name.strip()
         if tag_name:
             tag_slug = slugify(tag_name)
+            # 이미 선택된 태그인지 확인 (이름 또는 슬러그로 비교)
+            if tag_name.lower() in selected_tag_names or tag_slug.lower() in selected_tag_names:
+                continue  # 이미 선택된 태그는 스킵
             existing_tag = db.query(Tag).filter(Tag.slug == tag_slug).first()
             if existing_tag:
                 if existing_tag.id not in tag_ids_to_link:
@@ -467,7 +485,22 @@ async def update_post(
                         db.flush()
                         tag_ids_to_link.append(new_tag.id)
         
-        # 자동 태그 추출 및 추가 (제목이나 내용이 변경된 경우)
+        # 자동 태그 추출 및 추가 (제목이나 내용이 변경된 경우, 이미 선택된 태그는 제외)
+        # 이미 선택된 태그 이름 목록 생성 (중복 체크용)
+        selected_tag_names = set()
+        if post_data.tag_ids:
+            for tag_id in post_data.tag_ids:
+                tag = db.query(Tag).filter(Tag.id == tag_id).first()
+                if tag:
+                    selected_tag_names.add(tag.name.lower())
+                    selected_tag_names.add(tag.slug.lower())
+        if post_data.tag_names:
+            for tag_name in post_data.tag_names:
+                tag_name_clean = tag_name.strip().lower()
+                if tag_name_clean:
+                    selected_tag_names.add(tag_name_clean)
+                    selected_tag_names.add(slugify(tag_name_clean).lower())
+        
         title = post_data.title if post_data.title else post.title
         content = post_data.content if post_data.content else post.content
         auto_tags = extract_tags_from_content(title, content)
@@ -475,6 +508,9 @@ async def update_post(
             tag_name = tag_name.strip()
             if tag_name:
                 tag_slug = slugify(tag_name)
+                # 이미 선택된 태그인지 확인 (이름 또는 슬러그로 비교)
+                if tag_name.lower() in selected_tag_names or tag_slug.lower() in selected_tag_names:
+                    continue  # 이미 선택된 태그는 스킵
                 existing_tag = db.query(Tag).filter(Tag.slug == tag_slug).first()
                 if existing_tag:
                     if existing_tag.id not in tag_ids_to_link:

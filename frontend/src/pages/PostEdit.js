@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
+import { marked } from 'marked';
 import { api } from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -21,6 +22,7 @@ const PostEdit = () => {
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const tagInputRef = useRef(null);
 
   useEffect(() => {
     fetchCategories();
@@ -45,28 +47,77 @@ const PostEdit = () => {
     }
   };
 
-  const handleTagInputKeyDown = (e) => {
-    if (e.key === 'Enter' && tagInput.trim()) {
+  const handleTagInputKeyDown = useCallback((e) => {
+    if (e.key === 'Enter') {
       e.preventDefault();
-      const tagName = tagInput.trim();
-      // 태그 목록에서 찾거나 새로 추가
-      const existingTag = tags.find(t => t.name.toLowerCase() === tagName.toLowerCase());
-      if (existingTag) {
-        if (!selectedTags.find(t => t.id === existingTag.id)) {
-          setSelectedTags([...selectedTags, existingTag]);
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      const currentValue = tagInputRef.current?.value?.trim() || '';
+      if (currentValue) {
+        const tagName = currentValue;
+        // 태그 목록에서 찾거나 새로 추가
+        setSelectedTags(prevTags => {
+          // 이미 존재하는 태그인지 확인
+          if (prevTags.find(t => t.name.toLowerCase() === tagName.toLowerCase())) {
+            return prevTags;
+          }
+          const existingTag = tags.find(t => t.name.toLowerCase() === tagName.toLowerCase());
+          if (existingTag) {
+            return [...prevTags, existingTag];
+          } else {
+            // 새 태그는 임시로 추가 (백엔드에서 처리)
+            const newTag = { id: `temp-${Date.now()}`, name: tagName, slug: tagName.toLowerCase().replace(/\s+/g, '-') };
+            return [...prevTags, newTag];
+          }
+        });
+        // 입력값 초기화
+        if (tagInputRef.current) {
+          tagInputRef.current.value = '';
         }
-      } else {
-        // 새 태그는 임시로 추가 (백엔드에서 처리)
-        const newTag = { id: `temp-${Date.now()}`, name: tagName, slug: tagName.toLowerCase().replace(/\s+/g, '-') };
-        setSelectedTags([...selectedTags, newTag]);
+        setTagInput('');
+        // 포커스 유지
+        requestAnimationFrame(() => {
+          if (tagInputRef.current) {
+            tagInputRef.current.focus();
+          }
+        });
       }
-      setTagInput('');
     }
-  };
+  }, [tags]);
 
-  const removeTag = (tagId) => {
-    setSelectedTags(selectedTags.filter(t => t.id !== tagId));
-  };
+  const removeTag = useCallback((tagId) => {
+    setSelectedTags(prevTags => prevTags.filter(t => t.id !== tagId));
+  }, []);
+
+  const handleContentChange = useCallback((value) => {
+    setContent(value);
+  }, []);
+
+  const mdeOptions = useMemo(() => {
+    // marked를 사용하여 마크다운을 HTML로 변환
+    const previewRender = (plainText) => {
+      if (!plainText) return '';
+      try {
+        return marked.parse(plainText);
+      } catch (error) {
+        console.error('Markdown parsing error:', error);
+        return plainText;
+      }
+    };
+
+    return {
+      placeholder: t('posts.contentPlaceholder'),
+      spellChecker: false,
+      autofocus: false,
+      status: false,
+      toolbar: ['bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'side-by-side', 'fullscreen', '|', 'guide'],
+      renderingConfig: {
+        singleLineBreaks: false,
+        codeSyntaxHighlighting: true,
+      },
+      previewRender: previewRender,
+    };
+  }, [t]);
 
   useEffect(() => {
     if (user && (user.is_editor || user.is_admin)) {
@@ -234,6 +285,7 @@ const PostEdit = () => {
               ))}
             </div>
             <input
+              ref={tagInputRef}
               type="text"
               value={tagInput}
               onChange={(e) => {
@@ -241,8 +293,13 @@ const PostEdit = () => {
                 setTagInput(e.target.value);
               }}
               onKeyDown={(e) => {
-                e.stopPropagation();
-                handleTagInputKeyDown(e);
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  handleTagInputKeyDown(e);
+                  return false;
+                }
               }}
               onClick={(e) => e.stopPropagation()}
               placeholder={t('posts.tagPlaceholder')}
@@ -255,15 +312,14 @@ const PostEdit = () => {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               {t('posts.content')}
             </label>
-            <SimpleMDE
-              value={content}
-              onChange={setContent}
-              options={{
-                placeholder: t('posts.contentPlaceholder'),
-                spellChecker: false,
-                autofocus: true,
-              }}
-            />
+            <div className="simplemde-wrapper">
+              <SimpleMDE
+                value={content}
+                onChange={handleContentChange}
+                options={mdeOptions}
+                id="post-content-editor-edit"
+              />
+            </div>
           </div>
 
           <div className="flex gap-4 justify-end">

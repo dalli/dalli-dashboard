@@ -1,3 +1,307 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* SimpleMDE Editor Styles */
+.simplemde-wrapper {
+  position: relative;
+}
+
+.simplemde-wrapper .CodeMirror {
+  border: 1px solid rgb(229, 231, 235);
+  border-radius: 0.5rem;
+  min-height: 400px;
+}
+
+.dark .simplemde-wrapper .CodeMirror {
+  border-color: rgb(58, 63, 74);
+  background-color: rgb(26, 31, 40);
+  color: rgb(255, 255, 255);
+}
+
+.simplemde-wrapper .editor-toolbar {
+  border: 1px solid rgb(229, 231, 235);
+  border-bottom: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background-color: rgb(249, 250, 251);
+  position: relative;
+  z-index: 10;
+}
+
+.dark .simplemde-wrapper .editor-toolbar {
+  border-color: rgb(58, 63, 74);
+  background-color: rgb(40, 46, 57);
+}
+
+/* Fullscreen 모드에서도 툴바가 보이도록 */
+.CodeMirror-fullscreen ~ .editor-toolbar,
+.CodeMirror-fullscreen .editor-toolbar,
+.CodeMirror-sided ~ .editor-toolbar,
+.CodeMirror-sided .editor-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  border-radius: 0;
+}
+
+/* Fullscreen 모드에서 EasyMDEContainer 전체를 fullscreen으로 */
+.EasyMDEContainer:has(.CodeMirror-fullscreen) {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9998;
+  background-color: rgb(255, 255, 255);
+}
+
+.dark .EasyMDEContainer:has(.CodeMirror-fullscreen) {
+  background-color: rgb(26, 31, 40);
+}
+
+/* Fullscreen 모드에서 CodeMirror가 툴바 아래 공간을 차지하도록 */
+.EasyMDEContainer:has(.CodeMirror-fullscreen) .CodeMirror-fullscreen {
+  position: fixed !important;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100vh - 50px) !important;
+  width: 100vw !important;
+  z-index: 9999;
+}
+
+.simplemde-wrapper .editor-toolbar button {
+  color: rgb(75, 85, 99);
+}
+
+.dark .simplemde-wrapper .editor-toolbar button {
+  color: rgb(157, 166, 185);
+}
+
+.simplemde-wrapper .editor-toolbar button:hover,
+.simplemde-wrapper .editor-toolbar button.active {
+  background-color: rgb(229, 231, 235);
+  border-color: rgb(209, 213, 219);
+}
+
+.dark .simplemde-wrapper .editor-toolbar button:hover,
+.dark .simplemde-wrapper .editor-toolbar button.active {
+  background-color: rgb(58, 63, 74);
+  border-color: rgb(75, 85, 99);
+}
+
+/* Preview 모드 스타일 */
+.simplemde-wrapper .editor-preview,
+.simplemde-wrapper .editor-preview-full,
+.simplemde-wrapper .editor-preview-side {
+  background-color: rgb(255, 255, 255);
+  padding: 1rem;
+  color: rgb(17, 24, 39);
+  line-height: 1.6;
+}
+
+.dark .simplemde-wrapper .editor-preview,
+.dark .simplemde-wrapper .editor-preview-full,
+.dark .simplemde-wrapper .editor-preview-side {
+  background-color: rgb(40, 46, 57);
+  color: rgb(255, 255, 255);
+}
+
+/* Preview 내부 요소 스타일 */
+.simplemde-wrapper .editor-preview h1,
+.simplemde-wrapper .editor-preview-full h1,
+.simplemde-wrapper .editor-preview-side h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.simplemde-wrapper .editor-preview h2,
+.simplemde-wrapper .editor-preview-full h2,
+.simplemde-wrapper .editor-preview-side h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.simplemde-wrapper .editor-preview h3,
+.simplemde-wrapper .editor-preview-full h3,
+.simplemde-wrapper .editor-preview-side h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.simplemde-wrapper .editor-preview p,
+.simplemde-wrapper .editor-preview-full p,
+.simplemde-wrapper .editor-preview-side p {
+  margin-bottom: 1rem;
+}
+
+.simplemde-wrapper .editor-preview ul,
+.simplemde-wrapper .editor-preview ol,
+.simplemde-wrapper .editor-preview-full ul,
+.simplemde-wrapper .editor-preview-full ol,
+.simplemde-wrapper .editor-preview-side ul,
+.simplemde-wrapper .editor-preview-side ol {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+}
+
+.simplemde-wrapper .editor-preview code,
+.simplemde-wrapper .editor-preview-full code,
+.simplemde-wrapper .editor-preview-side code {
+  background-color: rgb(243, 244, 246);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.875rem;
+}
+
+.dark .simplemde-wrapper .editor-preview code,
+.dark .simplemde-wrapper .editor-preview-full code,
+.dark .simplemde-wrapper .editor-preview-side code {
+  background-color: rgb(26, 31, 40);
+  color: rgb(147, 197, 253);
+}
+
+.simplemde-wrapper .editor-preview pre,
+.simplemde-wrapper .editor-preview-full pre,
+.simplemde-wrapper .editor-preview-side pre {
+  background-color: rgb(243, 244, 246);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.dark .simplemde-wrapper .editor-preview pre,
+.dark .simplemde-wrapper .editor-preview-full pre,
+.dark .simplemde-wrapper .editor-preview-side pre {
+  background-color: rgb(26, 31, 40);
+  color: rgb(255, 255, 255);
+}
+
+.simplemde-wrapper .editor-preview blockquote,
+.simplemde-wrapper .editor-preview-full blockquote,
+.simplemde-wrapper .editor-preview-side blockquote {
+  border-left: 4px solid rgb(59, 130, 246);
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-bottom: 1rem;
+  color: rgb(107, 114, 128);
+}
+
+.dark .simplemde-wrapper .editor-preview blockquote,
+.dark .simplemde-wrapper .editor-preview-full blockquote,
+.dark .simplemde-wrapper .editor-preview-side blockquote {
+  border-left-color: rgb(96, 165, 250);
+  color: rgb(209, 213, 219);
+}
+
+/* Fullscreen 모드 스타일 */
+.CodeMirror-fullscreen {
+  position: fixed !important;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100vh - 50px) !important;
+  width: 100vw !important;
+  z-index: 9999;
+}
+
+.CodeMirror-fullscreen ~ .editor-preview-full {
+  position: fixed !important;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100vh - 50px) !important;
+  overflow-y: auto;
+  z-index: 9998;
+}
+
+/* Side by Side 모드 스타일 */
+.CodeMirror-sided {
+  width: 50% !important;
+  float: left !important;
+  position: relative !important;
+}
+
+.CodeMirror-sided ~ .editor-preview-side {
+  position: absolute !important;
+  top: 0 !important;
+  left: 50% !important;
+  right: 0 !important;
+  width: 50% !important;
+  height: 100% !important;
+  overflow-y: auto;
+  border-left: 1px solid rgb(229, 231, 235);
+  background-color: rgb(255, 255, 255);
+  z-index: 1;
+}
+
+.dark .CodeMirror-sided ~ .editor-preview-side {
+  border-left-color: rgb(58, 63, 74);
+  background-color: rgb(40, 46, 57);
+}
+
+/* Side by Side 모드에서 부모 컨테이너 */
+.EasyMDEContainer:has(.CodeMirror-sided) {
+  position: relative !important;
+  display: block !important;
+  overflow: hidden;
+}
+
+/* Fullscreen + Side by Side 모드 */
+.EasyMDEContainer:has(.CodeMirror-fullscreen.CodeMirror-sided) {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9998;
+  background-color: rgb(255, 255, 255);
+}
+
+.dark .EasyMDEContainer:has(.CodeMirror-fullscreen.CodeMirror-sided) {
+  background-color: rgb(26, 31, 40);
+}
+
+.EasyMDEContainer:has(.CodeMirror-fullscreen.CodeMirror-sided) .CodeMirror-fullscreen.CodeMirror-sided {
+  position: fixed !important;
+  top: 50px !important;
+  left: 0 !important;
+  width: 50vw !important;
+  height: calc(100vh - 50px) !important;
+  z-index: 9999;
+}
+
+.EasyMDEContainer:has(.CodeMirror-fullscreen.CodeMirror-sided) .editor-preview-side {
+  position: fixed !important;
+  top: 50px !important;
+  left: 50vw !important;
+  right: 0 !important;
+  width: 50vw !important;
+  height: calc(100vh - 50px) !important;
+  z-index: 9998;
+  overflow-y: auto;
+  border-left: 1px solid rgb(229, 231, 235);
+  background-color: rgb(255, 255, 255);
+}
+
+.dark .EasyMDEContainer:has(.CodeMirror-fullscreen.CodeMirror-sided) .editor-preview-side {
+  border-left-color: rgb(58, 63, 74);
+  background-color: rgb(40, 46, 57);
+}
