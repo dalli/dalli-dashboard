@@ -14,7 +14,8 @@
     "home": "홈",
     "user": "사용자",
     "view": "보기",
-    "back": "뒤로"
+    "back": "뒤로",
+    "list": "목록"
   },
   "sidebar": {
     "dashboard": "대시보드",

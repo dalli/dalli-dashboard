@@ -169,7 +169,7 @@ const PostDetail = () => {
             onClick={() => navigate('/posts')}
             className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
           >
-            {t('common.back')}
+            {t('common.list')}
           </button>
         </div>
       </div>
@@ -179,6 +179,36 @@ const PostDetail = () => {
           <ReactMarkdown 
             remarkPlugins={[remarkGfm]}
             components={{
+              h1: ({node, ...props}) => (
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-white mt-8 mb-4 pb-2 border-b border-gray-200 dark:border-[#3a3f4a]" {...props} />
+              ),
+              h2: ({node, ...props}) => (
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mt-6 mb-3 pb-2 border-b border-gray-200 dark:border-[#3a3f4a]" {...props} />
+              ),
+              h3: ({node, ...props}) => (
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mt-5 mb-2" {...props} />
+              ),
+              h4: ({node, ...props}) => (
+                <h4 className="text-xl font-semibold text-gray-900 dark:text-white mt-4 mb-2" {...props} />
+              ),
+              h5: ({node, ...props}) => (
+                <h5 className="text-lg font-medium text-gray-900 dark:text-white mt-3 mb-2" {...props} />
+              ),
+              h6: ({node, ...props}) => (
+                <h6 className="text-base font-medium text-gray-900 dark:text-white mt-3 mb-2" {...props} />
+              ),
+              p: ({node, ...props}) => (
+                <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed" {...props} />
+              ),
+              ul: ({node, ...props}) => (
+                <ul className="list-disc list-inside mb-4 space-y-2 text-gray-700 dark:text-gray-300 ml-4" {...props} />
+              ),
+              ol: ({node, ...props}) => (
+                <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-700 dark:text-gray-300 ml-4" {...props} />
+              ),
+              li: ({node, ...props}) => (
+                <li className="mb-1 leading-relaxed" {...props} />
+              ),
               table: ({node, ...props}) => (
                 <div className="overflow-x-auto my-4">
                   <table className="min-w-full divide-y divide-gray-200 dark:divide-[#3a3f4a] border border-gray-300 dark:border-[#3a3f4a] rounded-lg" {...props} />
@@ -196,30 +226,36 @@ const PostDetail = () => {
               td: ({node, ...props}) => (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300" {...props} />
               ),
+              pre: ({children, ...props}) => {
+                return (
+                  <pre className="bg-gray-50 dark:bg-[#1a1f28] p-4 rounded-lg overflow-x-auto border border-gray-200 dark:border-[#3a3f4a] my-4" {...props}>
+                    {children}
+                  </pre>
+                );
+              },
               code: ({node, inline, className, children, ...props}) => {
-                const match = /language-(\w+)/.exec(className || '');
-                const language = match && match[1];
-                
-                if (!inline && language === 'mermaid') {
+                if (inline) {
                   return (
-                    <div className="my-4">
-                      <pre className="bg-gray-100 dark:bg-[#1a1f28] p-4 rounded-lg overflow-x-auto">
-                        <code className="language-mermaid" {...props}>
-                          {String(children).replace(/\n$/, '')}
-                        </code>
-                      </pre>
-                    </div>
+                    <code className="bg-gray-100 dark:bg-[#1a1f28] text-blue-600 dark:text-blue-400 px-2 py-1 rounded text-sm font-mono border border-gray-200 dark:border-[#3a3f4a]" {...props}>
+                      {children}
+                    </code>
                   );
                 }
                 
-                return !inline && match ? (
-                  <pre className="bg-gray-100 dark:bg-[#1a1f28] p-4 rounded-lg overflow-x-auto my-4">
-                    <code className={className} {...props}>
-                      {children}
+                // 코드 블록 (inline이 false인 경우)
+                const match = /language-(\w+)/.exec(className || '');
+                const language = match && match[1];
+                
+                if (language === 'mermaid') {
+                  return (
+                    <code className="language-mermaid" {...props}>
+                      {String(children).replace(/\n$/, '')}
                     </code>
-                  </pre>
-                ) : (
-                  <code className="bg-gray-100 dark:bg-[#1a1f28] px-1 py-0.5 rounded text-sm" {...props}>
+                  );
+                }
+                
+                return (
+                  <code className={`${className} text-sm font-mono text-gray-800 dark:text-gray-200 whitespace-pre`} {...props}>
                     {children}
                   </code>
                 );
