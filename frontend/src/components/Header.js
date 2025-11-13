@@ -1,35 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 
 const Header = ({ onMenuClick }) => {
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const { t } = useTranslation();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/signin');
-  };
-
-  // 사용자 이니셜 생성
-  const getUserInitials = () => {
-    if (user?.full_name) {
-      return user.full_name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2);
-    }
-    if (user?.email) {
-      return user.email[0].toUpperCase();
-    }
-    return 'U';
-  };
 
   return (
     <header className="sticky top-0 z-50 flex w-full bg-white dark:bg-[#111318] border-b border-gray-200 dark:border-[#282e39] transition-colors">
@@ -81,47 +55,6 @@ const Header = ({ onMenuClick }) => {
                     {t('header.orderShipped')}
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-
-          {/* Profile */}
-          <div className="relative">
-            <button
-              onClick={() => setIsProfileOpen(!isProfileOpen)}
-              className="flex items-center gap-2"
-            >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-white font-semibold">
-                {getUserInitials()}
-              </div>
-            </button>
-            {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#282e39] rounded-lg shadow-lg border border-gray-200 dark:border-[#3a3f4a] py-2 transition-colors z-50">
-                <div className="px-4 py-2 border-b border-gray-200 dark:border-[#3a3f4a]">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.full_name || t('common.user')}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email || ''}</p>
-                </div>
-                <Link
-                  to="/profile"
-                  onClick={() => setIsProfileOpen(false)}
-                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
-                >
-                  {t('common.profile')}
-                </Link>
-                <Link
-                  to="/settings"
-                  onClick={() => setIsProfileOpen(false)}
-                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
-                >
-                  {t('common.settings')}
-                </Link>
-                <hr className="my-2 border-gray-200 dark:border-[#3a3f4a]" />
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
-                >
-                  {t('common.logout')}
-                </button>
               </div>
             )}
           </div>

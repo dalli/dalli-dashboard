@@ -1,11 +1,37 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../contexts/AuthContext';
 
 const Sidebar = ({ onClose }) => {
   const location = useLocation();
   const { t } = useTranslation();
   const [postsMenuOpen, setPostsMenuOpen] = useState(false);
+
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/signin');
+  };
+
+  // 사용자 이니셜 생성
+  const getUserInitials = () => {
+    if (user?.full_name) {
+      return user.full_name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    if (user?.email) {
+      return user.email[0].toUpperCase();
+    }
+    return 'U';
+  };
 
   const menuItems = [
     {
@@ -16,42 +42,6 @@ const Sidebar = ({ onClose }) => {
       ),
       label: t('sidebar.dashboard'),
       path: '/',
-    },
-    {
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
-          <path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208ZM184,88a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,88Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,120Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,152Z"></path>
-        </svg>
-      ),
-      label: t('sidebar.forms'),
-      path: '/forms',
-    },
-    {
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
-          <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"></path>
-        </svg>
-      ),
-      label: t('sidebar.charts'),
-      path: '/charts',
-    },
-    {
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
-          <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm12-88a12,12,0,1,1-12-12A12,12,0,0,1,140,128Z"></path>
-        </svg>
-      ),
-      label: t('sidebar.uiElements'),
-      path: '/ui-elements',
-    },
-    {
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
-          <path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"></path>
-        </svg>
-      ),
-      label: t('sidebar.users'),
-      path: '/users',
     },
     {
       icon: (
@@ -71,11 +61,11 @@ const Sidebar = ({ onClose }) => {
     {
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
-          <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM40,64H216v56H40Zm176,128H40V136H216v56Z"></path>
+          <path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"></path>
         </svg>
       ),
-      label: t('sidebar.tables'),
-      path: '/tables',
+      label: t('sidebar.users'),
+      path: '/users',
     },
   ];
 
@@ -94,6 +84,8 @@ const Sidebar = ({ onClose }) => {
     if (isPostsMenuActive()) {
       setPostsMenuOpen(true);
     }
+    // 경로가 변경되면 프로필 팝업 닫기
+    setIsProfileOpen(false);
   }, [location.pathname]);
 
   return (
@@ -111,7 +103,10 @@ const Sidebar = ({ onClose }) => {
               {item.hasSubmenu ? (
                 <div>
                   <button
-                    onClick={() => setPostsMenuOpen(!postsMenuOpen)}
+                    onClick={() => {
+                      setPostsMenuOpen(!postsMenuOpen);
+                      setIsProfileOpen(false);
+                    }}
                     className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg transition-colors ${
                       isActive(item.path)
                         ? 'bg-gray-100 dark:bg-[#282e39] text-gray-900 dark:text-white'
@@ -140,6 +135,7 @@ const Sidebar = ({ onClose }) => {
                           key={subItem.path}
                           to={subItem.path}
                           onClick={() => {
+                            setIsProfileOpen(false);
                             if (window.innerWidth < 1024 && onClose) {
                               onClose();
                             }
@@ -160,6 +156,7 @@ const Sidebar = ({ onClose }) => {
                 <Link
                   to={item.path}
                   onClick={() => {
+                    setIsProfileOpen(false);
                     if (window.innerWidth < 1024 && onClose) {
                       onClose();
                     }
@@ -182,6 +179,7 @@ const Sidebar = ({ onClose }) => {
         <Link
           to="/settings"
           onClick={() => {
+            setIsProfileOpen(false);
             // 모바일에서 링크 클릭 시 사이드바 닫기
             if (window.innerWidth < 1024 && onClose) {
               onClose();
@@ -200,6 +198,66 @@ const Sidebar = ({ onClose }) => {
           </div>
           <p className="text-sm font-medium leading-normal">{t('common.settings')}</p>
         </Link>
+        {/* User Profile */}
+        <div className="relative">
+          <button
+            onClick={() => setIsProfileOpen(!isProfileOpen)}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-gray-600 dark:text-[#9da6b9] hover:bg-gray-100 dark:hover:bg-[#282e39] hover:text-gray-900 dark:hover:text-white"
+          >
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-white font-semibold flex-shrink-0">
+              {getUserInitials()}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium leading-normal text-gray-900 dark:text-white truncate">
+                {user?.full_name || t('common.user')}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                {user?.email || ''}
+              </p>
+            </div>
+          </button>
+          {isProfileOpen && (
+            <div className="absolute bottom-full left-0 mb-2 w-full bg-white dark:bg-[#282e39] rounded-lg shadow-lg border border-gray-200 dark:border-[#3a3f4a] py-2 transition-colors z-50">
+              <Link
+                to="/profile"
+                onClick={() => {
+                  setIsProfileOpen(false);
+                  if (window.innerWidth < 1024 && onClose) {
+                    onClose();
+                  }
+                }}
+                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
+              >
+                {t('common.profile')}
+              </Link>
+              <Link
+                to="/settings"
+                onClick={() => {
+                  setIsProfileOpen(false);
+                  if (window.innerWidth < 1024 && onClose) {
+                    onClose();
+                  }
+                }}
+                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
+              >
+                {t('common.settings')}
+              </Link>
+              <hr className="my-2 border-gray-200 dark:border-[#3a3f4a]" />
+              <button
+                onClick={() => {
+                  setIsProfileOpen(false);
+                  if (window.innerWidth < 1024 && onClose) {
+                    onClose();
+                  }
+                  handleLogout();
+                }}
+                className="w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#3a3f4a] transition-colors"
+              >
+                {t('common.logout')}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
