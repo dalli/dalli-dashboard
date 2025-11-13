@@ -45,7 +45,7 @@ const Sidebar = ({ onClose, collapsed = false }) => {
         </svg>
       ),
       label: t('sidebar.dashboard'),
-      path: '/',
+      path: '/dashboard',
     },
     {
       icon: (
@@ -74,8 +74,8 @@ const Sidebar = ({ onClose, collapsed = false }) => {
   ];
 
   const isActive = (path) => {
-    if (path === '/') {
-      return location.pathname === '/';
+    if (path === '/dashboard') {
+      return location.pathname === '/dashboard';
     }
     return location.pathname.startsWith(path);
   };
@@ -171,19 +171,19 @@ const Sidebar = ({ onClose, collapsed = false }) => {
     <div className={`flex h-full min-h-screen flex-col justify-between bg-white dark:bg-[#111318] border-r border-gray-200 dark:border-[#282e39] transition-all duration-300 ${collapsed ? 'w-16 p-2' : 'w-64 p-4'}`}>
       <div className="flex flex-col gap-4">
         {!collapsed && (
-          <div className="flex items-center gap-2 mb-4">
+          <Link to="/" className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">DA</span>
             </div>
             <h1 className="text-gray-900 dark:text-white text-xl font-bold">DalliAdmin</h1>
-          </div>
+          </Link>
         )}
         {collapsed && (
-          <div className="flex items-center justify-center mb-4">
+          <Link to="/" className="flex items-center justify-center mb-4 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">DA</span>
             </div>
-          </div>
+          </Link>
         )}
         <div className="flex flex-col gap-2">
           {menuItems.map((item) => (

@@ -6,6 +6,7 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import './i18n/config';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Tables from './pages/Tables';
 import Forms from './pages/Forms';
@@ -24,6 +25,11 @@ import PostEdit from './pages/PostEdit';
 import PostDetail from './pages/PostDetail';
 import Categories from './pages/Categories';
 import Comments from './pages/Comments';
+import Products from './pages/Products';
+import Customers from './pages/Customers';
+import Docs from './pages/Docs';
+import Blog from './pages/Blog';
+import Contact from './pages/Contact';
 
 // 보호된 라우트 컴포넌트
 const ProtectedRoute = ({ children }) => {
@@ -56,6 +62,16 @@ function App() {
         <AuthProvider>
           <Router>
           <Routes>
+            {/* 홈페이지 (레이아웃 없음) */}
+            <Route path="/" element={<Home />} />
+            
+            {/* 공개 페이지들 (레이아웃 없음) */}
+            <Route path="/products" element={<Products />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/docs" element={<Docs />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/contact" element={<Contact />} />
+            
             {/* 인증 페이지들 (레이아웃 없음) */}
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
@@ -87,7 +103,7 @@ function App() {
                         <Header onMenuClick={toggleSidebar} />
                         <main className="min-h-screen">
                           <Routes>
-                            <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                             <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
                             <Route path="/posts" element={<ProtectedRoute><Posts /></ProtectedRoute>} />
                             <Route path="/posts/new" element={<ProtectedRoute><PostNew /></ProtectedRoute>} />

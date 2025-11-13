@@ -32,7 +32,7 @@ const Signin = () => {
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <Link to="/" className="text-primary hover:text-primary/80 text-sm font-medium mb-6 inline-block">
-              ← 대시보드로 돌아가기
+              ← 홈으로 돌아가기
             </Link>
             <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
               로그인
