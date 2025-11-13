@@ -70,8 +70,8 @@ function App() {
                   <div className="layout-container flex h-full grow flex-col">
                     <div className="flex">
                       {/* Sidebar */}
-                      <aside className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed left-0 top-0 h-screen z-40 transition-transform duration-300 ease-in-out`}>
-                        <Sidebar onClose={() => setSidebarOpen(false)} />
+                      <aside className={`fixed left-0 top-0 h-screen z-40 transition-all duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : 'lg:translate-x-0 -translate-x-full'}`}>
+                        <Sidebar onClose={() => setSidebarOpen(false)} collapsed={!sidebarOpen} />
                       </aside>
                       
                       {/* Overlay for mobile */}
@@ -83,7 +83,7 @@ function App() {
                       )}
                       
                       {/* Main Content Area */}
-                      <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'lg:pl-64' : 'lg:pl-0'}`}>
+                      <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'lg:pl-64' : 'lg:pl-16'}`}>
                         <Header onMenuClick={toggleSidebar} />
                         <main className="min-h-screen">
                           <Routes>
